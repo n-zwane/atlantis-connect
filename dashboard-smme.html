@@ -1,0 +1,3306 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=yes"
+        />
+        <title>Atlantis Connect • SMME Digital Ecosystem Hub</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+        <link rel="stylesheet" href="dashboard-smme.css" />
+    </head>
+    <body>
+        <div id="adminOverlay" class="admin-overlay" style="display: none">
+            <div style="display: flex; align-items: center; gap: 0.5rem">
+                <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                <span
+                    ><strong>ASEZCo Admin Mode Active</strong> &bull; System
+                    administrator workspace</span
+                >
+            </div>
+            <button onclick="exitAdminMode()" class="btn-exit-admin">
+                Return to SMME View
+            </button>
+        </div>
+
+        <div class="dashboard-layout">
+            <aside class="sidebar" id="mainSidebar">
+                <div class="sidebar-brand">
+                    <span class="brand-name">Atlantis Connect</span>
+                    <span class="portal-badge" id="portalBadge">SMME Hub</span>
+                </div>
+
+                <div class="sidebar-profile-block">
+                    <div class="profile-avatar-wrapper">
+                        <div class="profile-avatar" id="sidebarAvatar">AC</div>
+                    </div>
+                    <div class="profile-meta">
+                        <div class="profile-biz-name" id="sidebarBizName">
+                            Apex Construction
+                        </div>
+                        <div class="profile-biz-type" id="sidebarBizType">
+                            Infrastructure Contractor
+                        </div>
+                        <span
+                            class="status-badge verified"
+                            id="sidebarStatusBadge"
+                            >Verified</span
+                        >
+                    </div>
+                </div>
+
+                <nav
+                    class="sidebar-menu"
+                    id="smme-nav"
+                    aria-label="Main SMME Navigation"
+                >
+                    <button class="nav-item active" data-page="home-dashboard">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                            />
+                        </svg>
+                        <span>Home</span>
+                    </button>
+                    <button class="nav-item" data-page="business-profile">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+                            />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <span>Business Profile</span>
+                    </button>
+                    <button
+                        class="nav-item"
+                        data-page="procurement-opportunities"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="M21 21l-4.35-4.35" />
+                            <path d="M8 11h6" />
+                        </svg>
+                        <span>Procurement Opportunities</span>
+                    </button>
+                    <button class="nav-item" data-page="contracts-history">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                            />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                        </svg>
+                        <span>My Contracts</span>
+                    </button>
+                    <button class="nav-item" data-page="peer-network">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path d="M17 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            <path d="M21 21v-2a4 4 0 0 0-3-3.85" />
+                            <path
+                                d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"
+                            />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <span>Peer Network</span>
+                    </button>
+                    <button class="nav-item" data-page="capacity-building">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                            <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
+                        </svg>
+                        <span>Capacity Building</span>
+                    </button>
+                    <button class="nav-item" data-page="notifications-alerts">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"
+                            />
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                        </svg>
+                        <span>Notifications</span>
+                    </button>
+                    <button class="nav-item" data-page="settings-page">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <circle cx="12" cy="12" r="3" />
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+                            />
+                        </svg>
+                        <span>Settings</span>
+                    </button>
+
+                    <button
+                        class="nav-item admin-only-btn"
+                        id="sidebarAdminLink"
+                        style="display: none"
+                        onclick="enterAdminMode()"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                            />
+                        </svg>
+                        <span>Admin Workspace</span>
+                    </button>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <a href="portal.html" class="logout-trigger-btn">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                            />
+                        </svg>
+                        <span>Sign Out</span>
+                    </a>
+                </div>
+            </aside>
+
+            <div class="main-container">
+                <header class="app-header">
+                    <div class="header-left">
+                        <button
+                            class="mobile-menu-trigger"
+                            id="mobileMenuOpen"
+                            aria-label="Open navigation menu"
+                        >
+                            <svg
+                                viewBox="0 0 24 24"
+                                width="24"
+                                height="24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <line x1="3" y1="12" x2="21" y2="12" />
+                                <line x1="3" y1="6" x2="21" y2="6" />
+                                <line x1="3" y1="18" x2="21" y2="18" />
+                            </svg>
+                        </button>
+                        <div class="header-greeting-block">
+                            <span class="greeting-text" id="headerGreeting"
+                                >Good morning, Thandi</span
+                            >
+                            <span class="header-biz-sub" id="headerBizSub"
+                                >Apex Construction &bull; Hub Portal</span
+                            >
+                        </div>
+                    </div>
+
+                    <div class="header-right">
+                        <div
+                            class="header-avatar"
+                            id="headerAvatar"
+                            onclick="
+                                window.showDashboardPage('business-profile')
+                            "
+                        >
+                            TH
+                        </div>
+                    </div>
+                </header>
+
+                <main class="scrollable-stage" id="mainStage">
+                    <section id="home-dashboard" class="dashboard-page active">
+                        <div class="greeting-banner">
+                            <div class="banner-content">
+                                <h1 id="bannerGreetingText">
+                                    Good morning, Thandi
+                                </h1>
+                                <p class="banner-sub" id="bannerBizSubtext">
+                                    Apex Construction Ltd.
+                                </p>
+                                <div
+                                    class="banner-insight"
+                                    id="bannerDynamicInsight"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        width="18"
+                                        height="18"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        style="flex-shrink: 0"
+                                    >
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="12" y1="16" x2="12" y2="12" />
+                                        <line
+                                            x1="12"
+                                            y1="8"
+                                            x2="12.01"
+                                            y2="8"
+                                        />
+                                    </svg>
+                                    <span id="bannerInsightString"
+                                        >You have three live procurement
+                                        opportunities matching your business
+                                        profile.</span
+                                    >
+                                </div>
+                            </div>
+                            <div class="banner-illustration" aria-hidden="true">
+                                <svg
+                                    viewBox="0 0 100 100"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        d="M20 80 L50 30 L80 80 Z"
+                                        fill="rgba(255,255,255,0.06)"
+                                    />
+                                    <circle
+                                        cx="50"
+                                        cy="30"
+                                        r="15"
+                                        fill="rgba(15,159,104,0.15)"
+                                    />
+                                    <line
+                                        x1="10"
+                                        y1="90"
+                                        x2="90"
+                                        y2="90"
+                                        stroke="rgba(255,255,255,0.1)"
+                                        stroke-width="2"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="stats-grid">
+                            <div class="stat-card alert-card">
+                                <div class="stat-header">
+                                    <span class="stat-label"
+                                        >Active Matches</span
+                                    >
+                                    <svg
+                                        class="stat-icon"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                    >
+                                        <circle cx="11" cy="11" r="8" />
+                                        <path d="M21 21l-4.35-4.35" />
+                                    </svg>
+                                </div>
+                                <div class="stat-main">
+                                    <span
+                                        class="stat-number"
+                                        id="statMatchesCount"
+                                        >3</span
+                                    >
+                                    <span class="stat-trend positive"
+                                        >&uarr; Live</span
+                                    >
+                                </div>
+                            </div>
+                            <div class="stat-card view-card">
+                                <div class="stat-header">
+                                    <span class="stat-label"
+                                        >Profile Views</span
+                                    >
+                                    <svg
+                                        class="stat-icon"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                    >
+                                        <path
+                                            d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                                        />
+                                        <circle cx="12" cy="12" r="3" />
+                                    </svg>
+                                </div>
+                                <div class="stat-main">
+                                    <span
+                                        class="stat-number"
+                                        id="statViewsCount"
+                                        >14</span
+                                    >
+                                    <span class="stat-trend positive"
+                                        >+4 this week</span
+                                    >
+                                </div>
+                            </div>
+                            <div class="stat-card contract-card">
+                                <div class="stat-header">
+                                    <span class="stat-label"
+                                        >Active Contracts</span
+                                    >
+                                    <svg
+                                        class="stat-icon"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                    >
+                                        <path
+                                            d="M22 11.08V12a10 10 0 1 1-5.93-9.14"
+                                        />
+                                        <polyline
+                                            points="22 4 12 14.01 9 11.01"
+                                        />
+                                    </svg>
+                                </div>
+                                <div class="stat-main">
+                                    <span
+                                        class="stat-number"
+                                        id="statContractsCount"
+                                        >1</span
+                                    >
+                                    <span class="stat-trend steady"
+                                        >In progress</span
+                                    >
+                                </div>
+                            </div>
+                            <div class="stat-card passport-card">
+                                <div class="stat-header">
+                                    <span class="stat-label"
+                                        >Passport Strength</span
+                                    >
+                                    <svg
+                                        class="stat-icon"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                    >
+                                        <path
+                                            d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                                        />
+                                    </svg>
+                                </div>
+                                <div class="stat-main">
+                                    <span
+                                        class="stat-number"
+                                        id="statPassportPct"
+                                        >60%</span
+                                    >
+                                    <span class="stat-trend objective"
+                                        >Level 3 Tier</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="home-split-layout">
+                            <div class="home-main-flow">
+                                <div
+                                    class="content-block-panel passport-panel-match"
+                                >
+                                    <h3 class="panel-title">
+                                        Business Impact Passport Track
+                                    </h3>
+                                    <div class="passport-progress-wrapper">
+                                        <div class="passport-line-container">
+                                            <div
+                                                class="passport-progress-line"
+                                                id="passportProgressBar"
+                                                style="width: 60%"
+                                            ></div>
+
+                                            <div
+                                                class="milestone-node completed"
+                                                data-tooltip="Profile Setup Completed"
+                                            >
+                                                <div class="node-indicator">
+                                                    ✓
+                                                </div>
+                                                <span class="node-label"
+                                                    >Profile Created</span
+                                                >
+                                            </div>
+                                            <div
+                                                class="milestone-node completed"
+                                                data-tooltip="First Service/Product Listed"
+                                            >
+                                                <div class="node-indicator">
+                                                    ✓
+                                                </div>
+                                                <span class="node-label"
+                                                    >Service Listed</span
+                                                >
+                                            </div>
+                                            <div
+                                                class="milestone-node completed"
+                                                data-tooltip="Expressed Interest in Tender/Subcontract"
+                                            >
+                                                <div class="node-indicator">
+                                                    ✓
+                                                </div>
+                                                <span class="node-label"
+                                                    >First EOI Sent</span
+                                                >
+                                            </div>
+                                            <div
+                                                class="milestone-node locked"
+                                                data-tooltip="Successfully Complete a platform contract"
+                                            >
+                                                <div class="node-indicator">
+                                                    <svg
+                                                        viewBox="0 0 24 24"
+                                                        width="12"
+                                                        height="12"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        stroke-width="2.5"
+                                                    >
+                                                        <rect
+                                                            x="3"
+                                                            y="11"
+                                                            width="18"
+                                                            height="11"
+                                                            rx="2"
+                                                            ry="2"
+                                                        />
+                                                        <path
+                                                            d="M7 11V7a5 5 0 0 1 10 0v4"
+                                                        />
+                                                    </svg>
+                                                </div>
+                                                <span class="node-label"
+                                                    >Contract Finished</span
+                                                >
+                                            </div>
+                                            <div
+                                                class="milestone-node locked"
+                                                data-tooltip="Receive structural client assessment verification"
+                                            >
+                                                <div class="node-indicator">
+                                                    <svg
+                                                        viewBox="0 0 24 24"
+                                                        width="12"
+                                                        height="12"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        stroke-width="2.5"
+                                                    >
+                                                        <rect
+                                                            x="3"
+                                                            y="11"
+                                                            width="18"
+                                                            height="11"
+                                                            rx="2"
+                                                            ry="2"
+                                                        />
+                                                        <path
+                                                            d="M7 11V7a5 5 0 0 1 10 0v4"
+                                                        />
+                                                    </svg>
+                                                </div>
+                                                <span class="node-label"
+                                                    >Client Feedback</span
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="passport-next-step"
+                                        id="passportPromptText"
+                                    >
+                                        <strong>Next Step:</strong> Deliver
+                                        successfully on your active project
+                                        <em>"Solar Field Perimeter Fencing"</em>
+                                        to complete milestone 4 and unlock
+                                        verified tier ratings.
+                                    </div>
+                                </div>
+
+                                <div class="panel-section-header">
+                                    <h3 class="panel-title-inline">
+                                        Targeted Procurement Highlights
+                                    </h3>
+                                    <button
+                                        class="text-link-btn"
+                                        onclick="
+                                            window.showDashboardPage(
+                                                'procurement-opportunities',
+                                            )
+                                        "
+                                    >
+                                        View All Opportunities &rarr;
+                                    </button>
+                                </div>
+
+                                <div
+                                    class="horizontal-scroll-container"
+                                    id="homeProcurementHighlights"
+                                ></div>
+
+                                <div
+                                    class="content-block-panel"
+                                    style="margin-top: 1.5rem"
+                                >
+                                    <h3 class="panel-title">
+                                        Recent Hub Activity
+                                    </h3>
+                                    <div
+                                        class="timeline-container"
+                                        id="homeActivityFeed"
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <div class="home-widget-sidebar">
+                                <div
+                                    class="content-block-panel deadlines-panel-match"
+                                >
+                                    <h3 class="panel-title">
+                                        Critical Deadlines
+                                    </h3>
+                                    <div
+                                        class="deadlines-stack"
+                                        id="homeDeadlinesWidget"
+                                    ></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section
+                        id="business-profile"
+                        class="dashboard-page"
+                        style="display: none"
+                    >
+                        <div class="profile-header-banner">
+                            <div class="profile-header-main">
+                                <div
+                                    class="profile-avatar-large"
+                                    id="profileDisplayAvatar"
+                                >
+                                    TH
+                                </div>
+                                <div class="profile-title-block">
+                                    <div
+                                        style="
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 0.75rem;
+                                            flex-wrap: wrap;
+                                        "
+                                    >
+                                        <h2
+                                            class="profile-biz-heading"
+                                            id="profileDisplayBizName"
+                                        >
+                                            Apex Construction
+                                        </h2>
+                                        <span
+                                            class="status-badge verified"
+                                            id="profileDisplayVerification"
+                                            >Verified</span
+                                        >
+                                    </div>
+                                    <p
+                                        class="profile-category-sub"
+                                        id="profileDisplayMetaRow"
+                                    >
+                                        Infrastructure & Steel Engineering
+                                        &bull; Atlantis Industrial, Sector 4
+                                    </p>
+                                    <p
+                                        class="profile-stats-subline"
+                                        id="profileDisplayMetricsRow"
+                                    >
+                                        Established: 2019 | Team Size: 8 Members
+                                        | Passport Completion: 60%
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="profile-header-actions">
+                                <button
+                                    class="btn-save-toggle"
+                                    onclick="openProfileEditModal()"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        width="16"
+                                        height="16"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                    >
+                                        <path
+                                            d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                                        />
+                                        <path
+                                            d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                                        />
+                                    </svg>
+                                    Edit Profile
+                                </button>
+                                <button
+                                    class="btn-primary-apply"
+                                    style="background: var(--color-primary)"
+                                    onclick="triggerShareProfile()"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        width="16"
+                                        height="16"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                    >
+                                        <circle cx="18" cy="5" r="3" />
+                                        <circle cx="6" cy="12" r="3" />
+                                        <circle cx="18" cy="19" r="3" />
+                                        <line
+                                            x1="8.59"
+                                            y1="13.51"
+                                            x2="15.42"
+                                            y2="17.49"
+                                        />
+                                        <line
+                                            x1="15.41"
+                                            y1="6.51"
+                                            x2="8.59"
+                                            y2="10.49"
+                                        />
+                                    </svg>
+                                    Share & QR
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="profile-grid-layout">
+                            <div class="profile-primary-column">
+                                <div class="content-block-panel">
+                                    <h3 class="panel-title">
+                                        Company Statement & Vision
+                                    </h3>
+                                    <p
+                                        class="profile-long-description"
+                                        id="profileDisplayDescription"
+                                    >
+                                        Apex Construction is an artisanal
+                                        engineering and steel construction
+                                        enterprise based in Atlantis. We
+                                        specialize in green building structural
+                                        frameworks, security perimeter perimeter
+                                        engineering, and civil concrete works.
+                                        Committed to local employment and
+                                        sustainable resource management within
+                                        the Western Cape green tech corridor.
+                                    </p>
+                                    <div
+                                        class="tags-wrapper-row"
+                                        style="margin-top: 1.25rem"
+                                        id="profileDisplayCapabilities"
+                                    >
+                                        <span class="skill-tag"
+                                            >Steel Fabrication</span
+                                        >
+                                        <span class="skill-tag"
+                                            >Civil Contracting</span
+                                        >
+                                        <span class="skill-tag"
+                                            >Green Building</span
+                                        >
+                                        <span class="skill-tag"
+                                            >Perimeter Fencing</span
+                                        >
+                                    </div>
+                                </div>
+
+                                <div class="content-block-panel">
+                                    <div
+                                        style="
+                                            display: flex;
+                                            justify-content: space-between;
+                                            align-items: center;
+                                            margin-bottom: 1rem;
+                                        "
+                                    >
+                                        <h3
+                                            class="panel-title"
+                                            style="margin-bottom: 0"
+                                        >
+                                            Services & Commercial Capability
+                                            Catalogue
+                                        </h3>
+                                        <button
+                                            class="text-link-btn"
+                                            onclick="openServiceModal()"
+                                        >
+                                            + Add Service
+                                        </button>
+                                    </div>
+                                    <div
+                                        class="services-vertical-stack"
+                                        id="profileServicesList"
+                                    ></div>
+                                </div>
+
+                                <div class="content-block-panel">
+                                    <div
+                                        style="
+                                            display: flex;
+                                            justify-content: space-between;
+                                            align-items: center;
+                                            margin-bottom: 1rem;
+                                        "
+                                    >
+                                        <h3
+                                            class="panel-title"
+                                            style="margin-bottom: 0"
+                                        >
+                                            Worksite & Infrastructure Gallery
+                                        </h3>
+                                        <button
+                                            class="text-link-btn"
+                                            id="triggerGalleryUploadBtn"
+                                        >
+                                            + Upload Photo
+                                        </button>
+                                        <input
+                                            type="file"
+                                            id="hiddenGalleryFileInp"
+                                            accept="image/*"
+                                            style="display: none"
+                                        />
+                                    </div>
+                                    <div
+                                        class="photo-gallery-grid"
+                                        id="profileGalleryGrid"
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <div class="profile-secondary-sidebar">
+                                <div class="content-block-panel">
+                                    <h3 class="panel-title">
+                                        Contact & Communication Details
+                                    </h3>
+                                    <div class="contact-details-list">
+                                        <div class="contact-detail-item">
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                width="16"
+                                                height="16"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                                                />
+                                            </svg>
+                                            <span id="profileDisplayPhone"
+                                                >+27 21 577 1920</span
+                                            >
+                                        </div>
+                                        <div class="contact-detail-item">
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                width="16"
+                                                height="16"
+                                                fill="none"
+                                                stroke="#25D366"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
+                                                />
+                                            </svg>
+                                            <span id="profileDisplayWhatsapp"
+                                                >+27 82 555 0192</span
+                                            >
+                                        </div>
+                                        <div class="contact-detail-item">
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                width="16"
+                                                height="16"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                                                />
+                                                <polyline
+                                                    points="22,6 12,13 2,6"
+                                                />
+                                            </svg>
+                                            <span id="profileDisplayEmail"
+                                                >info@apexsteel.co.za</span
+                                            >
+                                        </div>
+                                        <div class="contact-detail-item">
+                                            <svg
+                                                viewBox="0 0 24 24"
+                                                width="16"
+                                                height="16"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                            >
+                                                <path
+                                                    d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
+                                                />
+                                                <circle cx="12" cy="10" r="3" />
+                                            </svg>
+                                            <span
+                                                >Reygerpark Industrial,
+                                                Atlantis</span
+                                            >
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="btn-primary-apply"
+                                        style="width: 100%; margin-top: 1.25rem"
+                                        id="profileContactActionBtn"
+                                    >
+                                        Simulate Client Message Route
+                                    </button>
+                                </div>
+
+                                <div class="content-block-panel">
+                                    <h3 class="panel-title">
+                                        B-BBEE & Ownership Identity
+                                    </h3>
+                                    <div
+                                        class="badge-stack-list"
+                                        id="profileDisplayDemographics"
+                                    >
+                                        <span class="demographic-badge"
+                                            >B-BBEE Level 1 Contributor</span
+                                        >
+                                        <span class="demographic-badge"
+                                            >100% Local Black-Owned
+                                            Enterprise</span
+                                        >
+                                        <span class="demographic-badge"
+                                            >Recognized Youth-Owned
+                                            Business</span
+                                        >
+                                        <span class="demographic-badge"
+                                            >EME Registered</span
+                                        >
+                                    </div>
+                                </div>
+
+                                <div class="content-block-panel">
+                                    <h3 class="panel-title">
+                                        Compliance Accreditations
+                                    </h3>
+                                    <div
+                                        class="compliance-documents-stack"
+                                        id="profileDocumentsList"
+                                    ></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section
+                        id="procurement-opportunities"
+                        class="dashboard-page"
+                        style="display: none"
+                    >
+                        <div class="search-filter-hero-wrapper">
+                            <div class="search-input-relative">
+                                <svg
+                                    class="search-absolute-icon"
+                                    viewBox="0 0 24 24"
+                                    width="20"
+                                    height="20"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <circle cx="11" cy="11" r="8" />
+                                    <path d="M21 21l-4.35-4.35" />
+                                </svg>
+                                <input
+                                    type="text"
+                                    class="search-master-input"
+                                    id="procurementSearchInput"
+                                    placeholder="Search tenders, subcontracting needs, framework agreements..."
+                                />
+                            </div>
+
+                            <div
+                                class="filter-chips-scroll-row"
+                                id="procurementPrimaryFilters"
+                            >
+                                <button
+                                    class="filter-chip active"
+                                    data-type="All"
+                                >
+                                    All Mechanisms
+                                </button>
+                                <button class="filter-chip" data-type="Tender">
+                                    Formal Tenders
+                                </button>
+                                <button
+                                    class="filter-chip"
+                                    data-type="Subcontracting"
+                                >
+                                    Subcontracting Needs
+                                </button>
+                                <button
+                                    class="filter-chip"
+                                    data-type="Repeat Supply"
+                                >
+                                    Repeat Offtake Supply
+                                </button>
+                                <button
+                                    class="filter-chip"
+                                    data-type="Once-off"
+                                >
+                                    Once-off Orders
+                                </button>
+                                <button class="filter-chip" data-type="EOI">
+                                    Expressions of Interest
+                                </button>
+                            </div>
+
+                            <div class="secondary-filters-row">
+                                <select
+                                    class="filter-dropdown-select"
+                                    id="filterDropdownIndustry"
+                                >
+                                    <option value="All">All Industries</option>
+                                    <option value="Green Energy">
+                                        Green Tech & Solar
+                                    </option>
+                                    <option value="Civils">
+                                        Civil Engineering
+                                    </option>
+                                    <option value="Logistics">
+                                        Supply Chain & Logistics
+                                    </option>
+                                </select>
+                                <select
+                                    class="filter-dropdown-select"
+                                    id="filterDropdownValue"
+                                >
+                                    <option value="All">All Values</option>
+                                    <option value="Under 500k">
+                                        Under R500k
+                                    </option>
+                                    <option value="500k-2M">R500k - R2M</option>
+                                    <option value="Over 2M">Over R2M</option>
+                                </select>
+                                <button
+                                    class="clear-filters-anchor"
+                                    id="clearFiltersActionLink"
+                                    style="display: none"
+                                >
+                                    Clear Active Parameter Modifiers
+                                </button>
+                            </div>
+                        </div>
+
+                        <div
+                            class="procurement-grid-stage"
+                            id="procurementOpportunitiesFeed"
+                        ></div>
+                    </section>
+
+                    <section
+                        id="contracts-history"
+                        class="dashboard-page"
+                        style="display: none"
+                    >
+                        <div class="metrics-overview-summary-strip">
+                            <div class="summary-metric-node">
+                                <span class="m-label"
+                                    >Active Portfolio Commitment</span
+                                >
+                                <span class="m-val" id="metricsActiveValue"
+                                    >R450,000</span
+                                >
+                            </div>
+                            <div class="summary-metric-node">
+                                <span class="m-label"
+                                    >Total Completed Invoiced Spend</span
+                                >
+                                <span class="m-val" id="metricsCompletedValue"
+                                    >R1,280,000</span
+                                >
+                            </div>
+                            <div class="summary-metric-node">
+                                <span class="m-label"
+                                    >Unique Enterprise Offtakers</span
+                                >
+                                <span class="m-val" id="metricsUniqueClients"
+                                    >4 Clients</span
+                                >
+                            </div>
+                        </div>
+
+                        <div
+                            class="content-block-panel"
+                            style="margin-bottom: 1.5rem"
+                        >
+                            <h3 class="panel-title">
+                                Active Process Pipeline Engagement Monitor
+                            </h3>
+                            <div class="pipeline-visual-header">
+                                <div class="pipeline-node-step active">
+                                    <div class="p-circle">1</div>
+                                    <span class="p-lbl"
+                                        >Submitted (<span id="pipeCountSub"
+                                            >0</span
+                                        >)</span
+                                    >
+                                </div>
+                                <div class="pipeline-connector-line"></div>
+                                <div class="pipeline-node-step active">
+                                    <div class="p-circle">2</div>
+                                    <span class="p-lbl"
+                                        >Review (<span id="pipeCountRev">1</span
+                                        >)</span
+                                    >
+                                </div>
+                                <div class="pipeline-connector-line"></div>
+                                <div class="pipeline-node-step">
+                                    <div class="p-circle">3</div>
+                                    <span class="p-lbl"
+                                        >Shortlisted (<span id="pipeCountShort"
+                                            >0</span
+                                        >)</span
+                                    >
+                                </div>
+                                <div class="pipeline-connector-line"></div>
+                                <div class="pipeline-node-step">
+                                    <div class="p-circle">4</div>
+                                    <span class="p-lbl"
+                                        >Negotiation (<span id="pipeCountNeg"
+                                            >0</span
+                                        >)</span
+                                    >
+                                </div>
+                                <div class="pipeline-connector-line"></div>
+                                <div class="pipeline-node-step active">
+                                    <div class="p-circle">5</div>
+                                    <span class="p-lbl"
+                                        >Active Engaged (<span id="pipeCountAct"
+                                            >1</span
+                                        >)</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 class="section-block-title">
+                            Current Active Engagements & In-Flight Contracts
+                        </h3>
+                        <div
+                            class="contracts-vertical-container"
+                            id="myContractsActiveStack"
+                        ></div>
+
+                        <div
+                            class="panel-section-header"
+                            style="margin-top: 2.5rem"
+                        >
+                            <h3 class="panel-title-inline">
+                                Complete Commercial Historical Ledger
+                            </h3>
+                            <div style="display: flex; gap: 0.5rem">
+                                <select
+                                    class="filter-dropdown-select text-sm"
+                                    id="historyFilterYear"
+                                >
+                                    <option value="All">All Years</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2025">2025</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="content-block-panel">
+                            <div
+                                class="history-timeline-container"
+                                id="myContractsHistoricalLedger"
+                            ></div>
+                        </div>
+                    </section>
+
+                    <section
+                        id="peer-network"
+                        class="dashboard-page"
+                        style="display: none"
+                    >
+                        <div class="peer-network-layout-split">
+                            <div class="network-primary-stream">
+                                <div class="content-block-panel composer-panel">
+                                    <h4 class="composer-title-label">
+                                        Broadcast Community Query or Insight
+                                        Update
+                                    </h4>
+                                    <div class="composer-input-wrapper">
+                                        <textarea
+                                            class="composer-textarea"
+                                            id="networkComposerTextarea"
+                                            rows="3"
+                                            placeholder="Share a structural tip, post an open capacity asset, or consult the local enterprise cluster..."
+                                        ></textarea>
+                                    </div>
+                                    <div class="composer-actions-row">
+                                        <div
+                                            style="
+                                                display: flex;
+                                                gap: 0.5rem;
+                                                align-items: center;
+                                            "
+                                        >
+                                            <select
+                                                class="filter-dropdown-select text-sm"
+                                                id="networkComposerCategory"
+                                            >
+                                                <option value="Question">
+                                                    Cluster Question
+                                                </option>
+                                                <option value="Success Story">
+                                                    Success Story
+                                                </option>
+                                                <option value="Tips and Advice">
+                                                    Tips & Business Advice
+                                                </option>
+                                                <option
+                                                    value="Opportunities Shared"
+                                                >
+                                                    Shared Opportunity
+                                                </option>
+                                            </select>
+                                            <button
+                                                class="attachment-trigger-clip-btn"
+                                                id="networkComposerPhotoTrigger"
+                                                title="Attach structural verification image indicator"
+                                            >
+                                                <svg
+                                                    viewBox="0 0 24 24"
+                                                    width="16"
+                                                    height="16"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="2"
+                                                >
+                                                    <path
+                                                        d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
+                                                    />
+                                                    <circle
+                                                        cx="12"
+                                                        cy="10"
+                                                        r="3"
+                                                    />
+                                                </svg>
+                                                <span
+                                                    id="networkComposerPhotoStatus"
+                                                    style="
+                                                        font-size: 0.75rem;
+                                                        color: var(
+                                                            --color-text-muted
+                                                        );
+                                                    "
+                                                    >No File</span
+                                                >
+                                            </button>
+                                            <input
+                                                type="file"
+                                                id="hiddenNetworkComposerFile"
+                                                accept="image/*"
+                                                style="display: none"
+                                            />
+                                        </div>
+                                        <button
+                                            class="btn-primary-apply"
+                                            id="networkSubmitPostBtn"
+                                            style="
+                                                padding: 0.5rem 1.25rem;
+                                                font-size: 0.85rem;
+                                            "
+                                        >
+                                            Transmit Post
+                                        </button>
+                                    </div>
+                                    <div class="composer-policy-reminder">
+                                        All transmissions route through ASEZCo
+                                        administrative moderation vectors to
+                                        guarantee cluster compliance and
+                                        professional standards.
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="network-stream-filter-tabs"
+                                    id="networkFeedTabs"
+                                >
+                                    <button
+                                        class="stream-tab active"
+                                        data-category="All"
+                                    >
+                                        Full Ecosystem Stream
+                                    </button>
+                                    <button
+                                        class="stream-tab"
+                                        data-category="Question"
+                                    >
+                                        Questions
+                                    </button>
+                                    <button
+                                        class="stream-tab"
+                                        data-category="Success Story"
+                                    >
+                                        Success Stories
+                                    </button>
+                                    <button
+                                        class="stream-tab"
+                                        data-category="Tips and Advice"
+                                    >
+                                        Tips & Advice
+                                    </button>
+                                </div>
+
+                                <div
+                                    class="network-posts-feed-stack"
+                                    id="networkPostsStreamTarget"
+                                ></div>
+                            </div>
+
+                            <div class="network-secondary-sidebar">
+                                <div
+                                    class="content-block-panel"
+                                    style="margin-bottom: 1.5rem"
+                                >
+                                    <h3 class="panel-title">
+                                        Approved Ecosystem Mentors
+                                    </h3>
+                                    <p class="panel-desc-context text-xs">
+                                        Connect directly with vetted operators
+                                        who have successfully scaled within the
+                                        Special Economic Zone supply tracking
+                                        matrix framework.
+                                    </p>
+                                    <div
+                                        class="mentor-cards-stack"
+                                        id="networkMentorsListTarget"
+                                    ></div>
+                                </div>
+
+                                <div
+                                    class="content-block-panel messenger-block-panel"
+                                >
+                                    <h3
+                                        class="panel-title"
+                                        id="chatPanelHeaderTitle"
+                                    >
+                                        Ecosystem Messenger Channel
+                                    </h3>
+                                    <div
+                                        class="chat-interface-wrapper"
+                                        id="chatInterfaceWrapper"
+                                        style="display: none"
+                                    >
+                                        <div
+                                            class="chat-messages-scroll-frame"
+                                            id="chatMessageScrollFrame"
+                                        ></div>
+                                        <div class="chat-input-control-strip">
+                                            <input
+                                                type="text"
+                                                class="chat-inline-input"
+                                                id="chatInlineInputField"
+                                                placeholder="Type direct response message text..."
+                                            />
+                                            <button
+                                                class="chat-send-btn"
+                                                id="chatSubmitBtn"
+                                            >
+                                                <svg
+                                                    viewBox="0 0 24 24"
+                                                    width="16"
+                                                    height="16"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="2"
+                                                >
+                                                    <line
+                                                        x1="22"
+                                                        y1="2"
+                                                        x2="11"
+                                                        y2="13"
+                                                    />
+                                                    <polygon
+                                                        points="22 2 15 22 11 13 2 9 22 2"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div
+                                            style="
+                                                display: flex;
+                                                justify-content: flex-end;
+                                                margin-top: 0.25rem;
+                                            "
+                                        >
+                                            <button
+                                                class="text-link-btn text-xs color-danger"
+                                                id="chatReportThreadBtn"
+                                            >
+                                                Report Thread to Admin
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="chat-empty-frame-state"
+                                        id="chatEmptyFrameState"
+                                    >
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            width="32"
+                                            height="32"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            style="
+                                                color: var(--color-text-muted);
+                                                opacity: 0.5;
+                                                margin-bottom: 0.5rem;
+                                            "
+                                        >
+                                            <path
+                                                d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                                            />
+                                        </svg>
+                                        <p
+                                            class="text-xs text-center"
+                                            style="
+                                                color: var(--color-text-muted);
+                                            "
+                                        >
+                                            Select "Request a Conversation" from
+                                            an approved mentor profile card to
+                                            initiate local secure private
+                                            communication routing channels.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section
+                        id="capacity-building"
+                        class="dashboard-page"
+                        style="display: none"
+                    >
+                        <div class="capacity-intro-lead-panel">
+                            <h3>
+                                ASEZCo Supplier Excellence & Capacity
+                                Amplification Suite
+                            </h3>
+                            <p>
+                                Accelerate your growth profile metrics.
+                                Completing any of the specialized local
+                                accelerator structural frameworks below appends
+                                immutable verified performance achievement
+                                credentials directly to your global platform
+                                Impact Passport profile matrix scoring system,
+                                dynamically driving matched priority ratios for
+                                municipal and industrial corporate enterprise
+                                supply procurement chains.
+                            </p>
+                        </div>
+
+                        <div
+                            class="content-block-panel"
+                            style="margin-bottom: 2rem"
+                        >
+                            <h3 class="panel-title">
+                                My Enrolled Training Streams & Verification
+                                Pipelines
+                            </h3>
+                            <div
+                                class="enrolled-programmes-grid"
+                                id="capacityEnrolledTrackStage"
+                            ></div>
+                        </div>
+
+                        <div class="panel-section-header">
+                            <h3 class="panel-title-inline">
+                                Ecosystem Programme & Technical Academy
+                                Catalogue
+                            </h3>
+                            <div style="display: flex; gap: 0.5rem">
+                                <select
+                                    class="filter-dropdown-select text-sm"
+                                    id="capacityFilterFormat"
+                                >
+                                    <option value="All">All Modalities</option>
+                                    <option value="In-Person">
+                                        In-Person Masterclasses
+                                    </option>
+                                    <option value="Hybrid">
+                                        Hybrid Cohort Accelerators
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div
+                            class="capacity-catalogue-grid"
+                            id="capacityCatalogueGridTarget"
+                        ></div>
+                    </section>
+
+                    <section
+                        id="notifications-alerts"
+                        class="dashboard-page"
+                        style="display: none"
+                    >
+                        <div
+                            class="page-header-block"
+                            style="margin-bottom: 1.5rem"
+                        >
+                            <h2
+                                style="
+                                    font-family: var(--font-heading);
+                                    color: var(--color-primary);
+                                    font-size: 1.75rem;
+                                    margin-bottom: 0.5rem;
+                                "
+                            >
+                                Notifications & Alerts Feed
+                            </h2>
+                            <p style="color: var(--color-text-muted)">
+                                Stay systematically integrated with procurement
+                                adjustments, processing states, chat messages,
+                                and timeline indicators.
+                            </p>
+                        </div>
+
+                        <div class="notifications-split-grid-layout">
+                            <div
+                                style="
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 1rem;
+                                "
+                            >
+                                <div
+                                    style="
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+                                        flex-wrap: wrap;
+                                        gap: 1rem;
+                                    "
+                                >
+                                    <div
+                                        style="
+                                            display: flex;
+                                            gap: 0.5rem;
+                                            overflow-x: auto;
+                                            scrollbar-width: none;
+                                        "
+                                    >
+                                        <button
+                                            class="filter-chip active"
+                                            id="notiFilterAll"
+                                        >
+                                            All Feeds
+                                        </button>
+                                        <button
+                                            class="filter-chip"
+                                            id="notiFilterUnread"
+                                        >
+                                            Unread Actions
+                                        </button>
+                                    </div>
+                                    <button
+                                        class="text-link-btn"
+                                        id="notiMarkAllReadBtn"
+                                        style="
+                                            font-weight: 600;
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 0.4rem;
+                                        "
+                                    >
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            width="16"
+                                            height="16"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg>
+                                        Mark all as read
+                                    </button>
+                                </div>
+
+                                <div
+                                    class="notifications-master-feed-card-container"
+                                    id="notificationsFeedListOutput"
+                                ></div>
+                            </div>
+
+                            <div>
+                                <div
+                                    class="content-block-panel alert-preferences-sticky-card"
+                                >
+                                    <h3
+                                        style="
+                                            margin-bottom: 1.25rem;
+                                            color: var(--color-primary);
+                                            font-size: 1.1rem;
+                                            border-bottom: 1px solid #eef2f2;
+                                            padding-bottom: 0.75rem;
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 0.5rem;
+                                        "
+                                    >
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            width="20"
+                                            height="20"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                                            />
+                                            <circle cx="12" cy="12" r="3" />
+                                        </svg>
+                                        Alert Preferences Config
+                                    </h3>
+
+                                    <div style="margin-bottom: 1.5rem">
+                                        <h4
+                                            style="
+                                                font-size: 0.9rem;
+                                                color: var(--color-text-dark);
+                                                margin-bottom: 0.75rem;
+                                            "
+                                        >
+                                            Notification Activity Matrices
+                                        </h4>
+                                        <div
+                                            style="
+                                                display: flex;
+                                                flex-direction: column;
+                                                gap: 0.75rem;
+                                            "
+                                        >
+                                            <div
+                                                style="
+                                                    display: flex;
+                                                    justify-content: space-between;
+                                                    align-items: center;
+                                                "
+                                            >
+                                                <span
+                                                    style="
+                                                        font-size: 0.85rem;
+                                                        color: var(
+                                                            --color-text-muted
+                                                        );
+                                                    "
+                                                    >Procurement Matches</span
+                                                >
+                                                <input
+                                                    type="checkbox"
+                                                    checked
+                                                    style="
+                                                        width: 16px;
+                                                        height: 16px;
+                                                        cursor: pointer;
+                                                        accent-color: var(
+                                                            --color-primary
+                                                        );
+                                                    "
+                                                />
+                                            </div>
+                                            <div
+                                                style="
+                                                    display: flex;
+                                                    justify-content: space-between;
+                                                    align-items: center;
+                                                "
+                                            >
+                                                <span
+                                                    style="
+                                                        font-size: 0.85rem;
+                                                        color: var(
+                                                            --color-text-muted
+                                                        );
+                                                    "
+                                                    >Status Pipeline
+                                                    Changes</span
+                                                >
+                                                <input
+                                                    type="checkbox"
+                                                    checked
+                                                    style="
+                                                        width: 16px;
+                                                        height: 16px;
+                                                        cursor: pointer;
+                                                        accent-color: var(
+                                                            --color-primary
+                                                        );
+                                                    "
+                                                />
+                                            </div>
+                                            <div
+                                                style="
+                                                    display: flex;
+                                                    justify-content: space-between;
+                                                    align-items: center;
+                                                "
+                                            >
+                                                <span
+                                                    style="
+                                                        font-size: 0.85rem;
+                                                        color: var(
+                                                            --color-text-muted
+                                                        );
+                                                    "
+                                                    >Peer Communications &
+                                                    Messages</span
+                                                >
+                                                <input
+                                                    type="checkbox"
+                                                    checked
+                                                    style="
+                                                        width: 16px;
+                                                        height: 16px;
+                                                        cursor: pointer;
+                                                        accent-color: var(
+                                                            --color-primary
+                                                        );
+                                                    "
+                                                />
+                                            </div>
+                                            <div
+                                                style="
+                                                    display: flex;
+                                                    justify-content: space-between;
+                                                    align-items: center;
+                                                "
+                                            >
+                                                <span
+                                                    style="
+                                                        font-size: 0.85rem;
+                                                        color: var(
+                                                            --color-text-muted
+                                                        );
+                                                    "
+                                                    >Programme Track
+                                                    Reminders</span
+                                                >
+                                                <input
+                                                    type="checkbox"
+                                                    checked
+                                                    style="
+                                                        width: 16px;
+                                                        height: 16px;
+                                                        cursor: pointer;
+                                                        accent-color: var(
+                                                            --color-primary
+                                                        );
+                                                    "
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-bottom: 1.5rem">
+                                        <h4
+                                            style="
+                                                font-size: 0.9rem;
+                                                color: var(--color-text-dark);
+                                                margin-bottom: 0.75rem;
+                                            "
+                                        >
+                                            Alert Delivery Channels
+                                        </h4>
+                                        <div
+                                            style="
+                                                display: flex;
+                                                flex-direction: column;
+                                                gap: 0.5rem;
+                                            "
+                                        >
+                                            <div
+                                                style="
+                                                    display: flex;
+                                                    justify-content: space-between;
+                                                    align-items: center;
+                                                    background: #fcfdfd;
+                                                    border: 1px solid #eef2f2;
+                                                    padding: 0.6rem;
+                                                    border-radius: 8px;
+                                                "
+                                            >
+                                                <span
+                                                    style="
+                                                        font-size: 0.85rem;
+                                                        font-weight: 500;
+                                                        color: var(
+                                                            --color-text-dark
+                                                        );
+                                                        display: flex;
+                                                        align-items: center;
+                                                        gap: 0.5rem;
+                                                    "
+                                                >
+                                                    <svg
+                                                        viewBox="0 0 24 24"
+                                                        width="14"
+                                                        height="14"
+                                                        fill="none"
+                                                        stroke="var(--color-primary)"
+                                                        stroke-width="2"
+                                                    >
+                                                        <rect
+                                                            x="3"
+                                                            y="3"
+                                                            width="18"
+                                                            height="18"
+                                                            rx="2"
+                                                            ry="2"
+                                                        />
+                                                    </svg>
+                                                    In-App Platform
+                                                </span>
+                                                <input
+                                                    type="checkbox"
+                                                    checked
+                                                    disabled
+                                                    style="
+                                                        width: 16px;
+                                                        height: 16px;
+                                                        accent-color: var(
+                                                            --color-text-muted
+                                                        );
+                                                    "
+                                                />
+                                            </div>
+                                            <div
+                                                style="
+                                                    display: flex;
+                                                    justify-content: space-between;
+                                                    align-items: center;
+                                                    background: #fcfdfd;
+                                                    border: 1px solid #eef2f2;
+                                                    padding: 0.6rem;
+                                                    border-radius: 8px;
+                                                "
+                                            >
+                                                <span
+                                                    style="
+                                                        font-size: 0.85rem;
+                                                        font-weight: 500;
+                                                        color: var(
+                                                            --color-text-dark
+                                                        );
+                                                        display: flex;
+                                                        align-items: center;
+                                                        gap: 0.5rem;
+                                                    "
+                                                >
+                                                    <svg
+                                                        viewBox="0 0 24 24"
+                                                        width="14"
+                                                        height="14"
+                                                        fill="none"
+                                                        stroke="#25D366"
+                                                        stroke-width="2"
+                                                    >
+                                                        <path
+                                                            d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
+                                                        />
+                                                    </svg>
+                                                    WhatsApp Alerts
+                                                </span>
+                                                <input
+                                                    type="checkbox"
+                                                    id="prefChannelWhatsapp"
+                                                    checked
+                                                    style="
+                                                        width: 16px;
+                                                        height: 16px;
+                                                        cursor: pointer;
+                                                        accent-color: var(
+                                                            --color-primary
+                                                        );
+                                                    "
+                                                />
+                                            </div>
+                                            <div
+                                                style="
+                                                    display: flex;
+                                                    justify-content: space-between;
+                                                    align-items: center;
+                                                    background: #fcfdfd;
+                                                    border: 1px solid #eef2f2;
+                                                    padding: 0.6rem;
+                                                    border-radius: 8px;
+                                                "
+                                            >
+                                                <span
+                                                    style="
+                                                        font-size: 0.85rem;
+                                                        font-weight: 500;
+                                                        color: var(
+                                                            --color-text-dark
+                                                        );
+                                                        display: flex;
+                                                        align-items: center;
+                                                        gap: 0.5rem;
+                                                    "
+                                                >
+                                                    <svg
+                                                        viewBox="0 0 24 24"
+                                                        width="14"
+                                                        height="14"
+                                                        fill="none"
+                                                        stroke="var(--color-primary)"
+                                                        stroke-width="2"
+                                                    >
+                                                        <path
+                                                            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                                                        />
+                                                    </svg>
+                                                    Standard SMS
+                                                </span>
+                                                <input
+                                                    type="checkbox"
+                                                    id="prefChannelSms"
+                                                    style="
+                                                        width: 16px;
+                                                        height: 16px;
+                                                        cursor: pointer;
+                                                        accent-color: var(
+                                                            --color-primary
+                                                        );
+                                                    "
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-bottom: 1.5rem">
+                                        <label
+                                            style="
+                                                display: block;
+                                                font-size: 0.85rem;
+                                                font-weight: 500;
+                                                color: var(--color-text-dark);
+                                                margin-bottom: 0.4rem;
+                                            "
+                                            >Primary Notification Handset
+                                            Number</label
+                                        >
+                                        <div
+                                            style="
+                                                display: flex;
+                                                gap: 0.5rem;
+                                                margin-bottom: 0.25rem;
+                                            "
+                                        >
+                                            <input
+                                                type="text"
+                                                id="prefContactPhone"
+                                                value="+27 82 555 0192"
+                                                style="
+                                                    width: 100%;
+                                                    padding: 0.5rem 0.75rem;
+                                                    border: 1px solid #dbe4e5;
+                                                    border-radius: 8px;
+                                                    font-family: var(
+                                                        --font-body
+                                                    );
+                                                    font-size: 0.85rem;
+                                                "
+                                            />
+                                            <button
+                                                class="btn-save-toggle"
+                                                id="btnSavePreferences"
+                                                style="
+                                                    padding: 0 0.75rem;
+                                                    height: auto;
+                                                    font-size: 0.8rem;
+                                                "
+                                            >
+                                                Save
+                                            </button>
+                                        </div>
+                                        <p
+                                            id="phoneValidationMsg"
+                                            style="
+                                                font-size: 0.7rem;
+                                                color: var(--color-text-muted);
+                                            "
+                                        >
+                                            Used for verification token
+                                            streaming routing paths.
+                                        </p>
+                                    </div>
+
+                                    <div
+                                        style="
+                                            border-top: 1px solid #eef2f2;
+                                            padding-top: 1rem;
+                                        "
+                                    >
+                                        <button
+                                            class="btn-primary-apply"
+                                            id="btnTestAlert"
+                                            style="
+                                                width: 100%;
+                                                display: flex;
+                                                justify-content: center;
+                                                align-items: center;
+                                                gap: 0.5rem;
+                                                background: var(
+                                                    --color-text-dark
+                                                );
+                                                padding: 0.6rem 1rem;
+                                                font-size: 0.85rem;
+                                            "
+                                        >
+                                            Send Test Gateway Alert
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section
+                        id="settings-page"
+                        class="dashboard-page"
+                        style="display: none"
+                    >
+                        <div
+                            class="page-header-block"
+                            style="margin-bottom: 1.5rem"
+                        >
+                            <h2
+                                style="
+                                    font-family: var(--font-heading);
+                                    color: var(--color-primary);
+                                    font-size: 1.75rem;
+                                    margin-bottom: 0.5rem;
+                                "
+                            >
+                                System Configuration & Settings
+                            </h2>
+                            <p style="color: var(--color-text-muted)">
+                                Manage interface parameters, authentication
+                                matrices, and local account profiles.
+                            </p>
+                        </div>
+                        <div
+                            class="content-block-panel"
+                            style="max-width: 600px"
+                        >
+                            <div
+                                style="
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 1.25rem;
+                                "
+                            >
+                                <div
+                                    style="
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+                                        border-bottom: 1px solid #eef2f2;
+                                        padding-bottom: 1rem;
+                                    "
+                                >
+                                    <div>
+                                        <h4
+                                            style="
+                                                margin: 0 0 0.25rem 0;
+                                                color: var(--color-text-dark);
+                                            "
+                                        >
+                                            High Contrast View Mode (Beta)
+                                        </h4>
+                                        <p
+                                            style="
+                                                margin: 0;
+                                                font-size: 0.8rem;
+                                                color: var(--color-text-muted);
+                                            "
+                                        >
+                                            Toggle dark system background
+                                            contrast parameters dynamically.
+                                        </p>
+                                    </div>
+                                    <input
+                                        type="checkbox"
+                                        id="settingsContrastToggle"
+                                        style="
+                                            width: 20px;
+                                            height: 20px;
+                                            cursor: pointer;
+                                        "
+                                    />
+                                </div>
+                                <div
+                                    style="
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+                                        border-bottom: 1px solid #eef2f2;
+                                        padding-bottom: 1rem;
+                                    "
+                                >
+                                    <div>
+                                        <h4
+                                            style="
+                                                margin: 0 0 0.25rem 0;
+                                                color: var(--color-text-dark);
+                                            "
+                                        >
+                                            Development Simulator Override
+                                        </h4>
+                                        <p
+                                            style="
+                                                margin: 0;
+                                                font-size: 0.8rem;
+                                                color: var(--color-text-muted);
+                                            "
+                                        >
+                                            Elevate local profile configuration
+                                            role context permissions to
+                                            Administrative status.
+                                        </p>
+                                    </div>
+                                    <button
+                                        class="btn-save-toggle"
+                                        id="settingsTriggerRoleElevationBtn"
+                                        style="
+                                            font-size: 0.8rem;
+                                            padding: 0.4rem 1rem;
+                                        "
+                                    >
+                                        Elevate to Admin
+                                    </button>
+                                </div>
+                                <div>
+                                    <button
+                                        class="btn-save-toggle"
+                                        style="
+                                            color: var(--color-danger);
+                                            border-color: var(--color-danger);
+                                            font-size: 0.85rem;
+                                            padding: 0.5rem 1.25rem;
+                                        "
+                                        onclick="
+                                            alert(
+                                                'Prototype Safety Interlock: Connection hooks must be deployed via live production database pipelines to commit account erasure.',
+                                            )
+                                        "
+                                    >
+                                        Request Hub Account Deactivation
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section
+                        id="admin-business-dashboard"
+                        class="dashboard-page admin-page"
+                        style="display: none"
+                    >
+                        <div class="page-header-block">
+                            <span class="admin-section-badge"
+                                >Ecosystem Command Matrix</span
+                            >
+                            <h2>Participant & Business Macro Dashboard</h2>
+                            <p>
+                                Real-time statistical tracking of all industrial
+                                cluster suppliers, verification progression
+                                trajectories, and supply-chain readiness
+                                indexing across the Atlantis Special Economic
+                                Zone.
+                            </p>
+                        </div>
+                        <div
+                            class="admin-stats-strip-row"
+                            style="
+                                display: grid;
+                                grid-template-columns: repeat(
+                                    auto-fit,
+                                    minmax(200px, 1fr)
+                                );
+                                gap: 1rem;
+                                margin: 1.5rem 0;
+                            "
+                        >
+                            <div
+                                class="admin-metric-card"
+                                style="
+                                    background: #fff;
+                                    padding: 1.25rem;
+                                    border-radius: 8px;
+                                    border-left: 4px solid var(--color-primary);
+                                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+                                "
+                            >
+                                <div
+                                    style="
+                                        font-size: 0.8rem;
+                                        color: var(--color-text-muted);
+                                        font-weight: 600;
+                                    "
+                                >
+                                    REGISTERED SMMES
+                                </div>
+                                <div
+                                    style="
+                                        font-size: 1.75rem;
+                                        font-family: var(--font-heading);
+                                        font-weight: 700;
+                                        margin-top: 0.25rem;
+                                        color: var(--color-text-dark);
+                                    "
+                                >
+                                    142 Firms
+                                </div>
+                            </div>
+                            <div
+                                class="admin-metric-card"
+                                style="
+                                    background: #fff;
+                                    padding: 1.25rem;
+                                    border-radius: 8px;
+                                    border-left: 4px solid var(--color-accent);
+                                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+                                "
+                            >
+                                <div
+                                    style="
+                                        font-size: 0.8rem;
+                                        color: var(--color-text-muted);
+                                        font-weight: 600;
+                                    "
+                                >
+                                    PENDING VALIDATION
+                                </div>
+                                <div
+                                    style="
+                                        font-size: 1.75rem;
+                                        font-family: var(--font-heading);
+                                        font-weight: 700;
+                                        margin-top: 0.25rem;
+                                        color: var(--color-amber);
+                                    "
+                                >
+                                    19 Profiles
+                                </div>
+                            </div>
+                            <div
+                                class="admin-metric-card"
+                                style="
+                                    background: #fff;
+                                    padding: 1.25rem;
+                                    border-radius: 8px;
+                                    border-left: 4px solid var(--color-amber);
+                                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+                                "
+                            >
+                                <div
+                                    style="
+                                        font-size: 0.8rem;
+                                        color: var(--color-text-muted);
+                                        font-weight: 600;
+                                    "
+                                >
+                                    ACTIVE RFQ LINE ITEMS
+                                </div>
+                                <div
+                                    style="
+                                        font-size: 1.75rem;
+                                        font-family: var(--font-heading);
+                                        font-weight: 700;
+                                        margin-top: 0.25rem;
+                                        color: var(--color-text-dark);
+                                    "
+                                >
+                                    28 Live Openings
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content-block-panel">
+                            <h4 style="margin-bottom: 1rem">
+                                Priority Action Queue: Profile Verifications
+                            </h4>
+                            <div style="overflow-x: auto">
+                                <table
+                                    style="
+                                        width: 100%;
+                                        border-collapse: collapse;
+                                        font-size: 0.85rem;
+                                        text-align: left;
+                                    "
+                                >
+                                    <thead>
+                                        <tr
+                                            style="
+                                                border-bottom: 2px solid #eef2f2;
+                                                color: var(--color-text-muted);
+                                            "
+                                        >
+                                            <th style="padding: 0.75rem">
+                                                Company Name
+                                            </th>
+                                            <th style="padding: 0.75rem">
+                                                Sector Block
+                                            </th>
+                                            <th style="padding: 0.75rem">
+                                                Passport Track
+                                            </th>
+                                            <th style="padding: 0.75rem">
+                                                Action Link
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            style="
+                                                border-bottom: 1px solid #eef2f2;
+                                            "
+                                        >
+                                            <td
+                                                style="
+                                                    padding: 0.75rem;
+                                                    font-weight: 600;
+                                                "
+                                            >
+                                                Ndlovu Solar Solutions
+                                            </td>
+                                            <td style="padding: 0.75rem">
+                                                Photovoltaic Reticulation
+                                            </td>
+                                            <td
+                                                style="
+                                                    padding: 0.75rem;
+                                                    color: var(--color-accent);
+                                                    font-weight: 600;
+                                                "
+                                            >
+                                                85% Strength
+                                            </td>
+                                            <td style="padding: 0.75rem">
+                                                <button
+                                                    class="btn-save-toggle text-xs"
+                                                    style="
+                                                        padding: 0.25rem 0.5rem;
+                                                    "
+                                                    onclick="
+                                                        alert(
+                                                            'Administrative Action: Profile Verified under System Master Access Credential Authority Key.',
+                                                        )
+                                                    "
+                                                >
+                                                    Approve Credentials
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr
+                                            style="
+                                                border-bottom: 1px solid #eef2f2;
+                                            "
+                                        >
+                                            <td
+                                                style="
+                                                    padding: 0.75rem;
+                                                    font-weight: 600;
+                                                "
+                                            >
+                                                Atlantis Eco-Bricks
+                                            </td>
+                                            <td style="padding: 0.75rem">
+                                                Recycled Aggregates
+                                            </td>
+                                            <td
+                                                style="
+                                                    padding: 0.75rem;
+                                                    color: var(--color-amber);
+                                                    font-weight: 600;
+                                                "
+                                            >
+                                                45% Strength
+                                            </td>
+                                            <td style="padding: 0.75rem">
+                                                <button
+                                                    class="btn-save-toggle text-xs"
+                                                    style="
+                                                        padding: 0.25rem 0.5rem;
+                                                    "
+                                                    onclick="
+                                                        alert(
+                                                            'Administrative Action: Verification dossier opened for manual review.',
+                                                        )
+                                                    "
+                                                >
+                                                    Audit Logs
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section
+                        id="admin-programme-tracking"
+                        class="dashboard-page admin-page"
+                        style="display: none"
+                    >
+                        <div class="page-header-block">
+                            <span class="admin-section-badge"
+                                >Capacity Architecture</span
+                            >
+                            <h2>Ecosystem Programme Tracking Matrix</h2>
+                            <p>
+                                Monitor cohort pipelines, compliance
+                                masterclasses, mentoring allocation linkages,
+                                and credentialing audits across active training
+                                operations.
+                            </p>
+                        </div>
+                        <div class="content-block-panel">
+                            <h4 style="margin-bottom: 1rem">
+                                Active Subsidised Training Cohort Registrations
+                            </h4>
+                            <div
+                                style="
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 1rem;
+                                "
+                            >
+                                <div
+                                    style="
+                                        padding: 1rem;
+                                        border: 1px solid #eef2f2;
+                                        border-radius: 6px;
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+                                        flex-wrap: wrap;
+                                        gap: 1rem;
+                                    "
+                                >
+                                    <div>
+                                        <span
+                                            style="
+                                                font-size: 0.75rem;
+                                                font-weight: 600;
+                                                color: var(--color-accent);
+                                                background: #edfdf7;
+                                                padding: 0.2rem 0.5rem;
+                                                border-radius: 4px;
+                                            "
+                                            >LIVE COHORT</span
+                                        >
+                                        <h5
+                                            style="
+                                                margin: 0.25rem 0 0.1rem 0;
+                                                font-size: 0.95rem;
+                                            "
+                                        >
+                                            Tender Readiness Masterclass Series
+                                        </h5>
+                                        <p
+                                            style="
+                                                margin: 0;
+                                                font-size: 0.8rem;
+                                                color: var(--color-text-muted);
+                                            "
+                                        >
+                                            Provider: SEZ Enterprise Development
+                                            Division &bull; 42 Enrolled Firms
+                                        </p>
+                                    </div>
+                                    <div style="text-align: right">
+                                        <div
+                                            style="
+                                                font-size: 0.85rem;
+                                                font-weight: 600;
+                                            "
+                                        >
+                                            88% Attendance Ratio
+                                        </div>
+                                        <div
+                                            style="
+                                                font-size: 0.75rem;
+                                                color: var(--color-text-muted);
+                                            "
+                                        >
+                                            Module 4 of 6 Active
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section
+                        id="admin-impact-metrics"
+                        class="dashboard-page admin-page"
+                        style="display: none"
+                    >
+                        <div class="page-header-block">
+                            <span class="admin-section-badge"
+                                >Socio-Economic Audit</span
+                            >
+                            <h2>
+                                Ecosystem Impact Metrics & Transfomation
+                                Analytics
+                            </h2>
+                            <p>
+                                Aggregated validation engine tracking localized
+                                jobs created, local content industrial
+                                investment values, and B-BBEE structural
+                                deployment balances within the Atlantis
+                                industrial region.
+                            </p>
+                        </div>
+                        <div
+                            style="
+                                display: grid;
+                                grid-template-columns: 1fr 1fr;
+                                gap: 1.5rem;
+                                min-width: 0;
+                            "
+                            class="mobile-collapse-grid"
+                        >
+                            <div class="content-block-panel">
+                                <h4
+                                    style="
+                                        margin-bottom: 1rem;
+                                        color: var(--color-primary);
+                                    "
+                                >
+                                    Local Spend Allocation Dynamics
+                                </h4>
+                                <div
+                                    style="
+                                        height: 150px;
+                                        background: #f8fafc;
+                                        border-radius: 8px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        color: var(--color-text-muted);
+                                        font-size: 0.85rem;
+                                        border: 1px dashed #dbe4e5;
+                                    "
+                                >
+                                    [Data Capture Framework Render Matrix: 68%
+                                    Local Cluster Capture Ratio]
+                                </div>
+                            </div>
+                            <div class="content-block-panel">
+                                <h4
+                                    style="
+                                        margin-bottom: 1rem;
+                                        color: var(--color-primary);
+                                    "
+                                >
+                                    Employment Footprint Indicators
+                                </h4>
+                                <div
+                                    style="
+                                        height: 150px;
+                                        background: #f8fafc;
+                                        border-radius: 8px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        color: var(--color-text-muted);
+                                        font-size: 0.85rem;
+                                        border: 1px dashed #dbe4e5;
+                                    "
+                                >
+                                    [Employment Metric Tracking Engine: +340
+                                    Sustainable Green-Collar Jobs Logged]
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section
+                        id="admin-reports"
+                        class="dashboard-page admin-page"
+                        style="display: none"
+                    >
+                        <div class="page-header-block">
+                            <span class="admin-section-badge"
+                                >Governance Dossier</span
+                            >
+                            <h2>System Compliance Report Generator</h2>
+                            <p>
+                                Construct compiled administrative analytics
+                                datasets, activity ledgers, and compliance
+                                reviews optimized for institutional oversight
+                                reporting schedules.
+                            </p>
+                        </div>
+                        <div
+                            class="content-block-panel"
+                            style="max-width: 500px"
+                        >
+                            <h4 style="margin-bottom: 1rem">
+                                Configure Target Report Engine Output
+                            </h4>
+                            <div
+                                style="
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 1rem;
+                                "
+                            >
+                                <div>
+                                    <label
+                                        style="
+                                            display: block;
+                                            font-size: 0.8rem;
+                                            font-weight: 600;
+                                            margin-bottom: 0.25rem;
+                                        "
+                                        >Report Schema Scope</label
+                                    >
+                                    <select
+                                        class="filter-dropdown-select"
+                                        style="width: 100%"
+                                    >
+                                        <option>
+                                            Ecosystem SMME Procurement Match
+                                            Ledger Summary
+                                        </option>
+                                        <option>
+                                            B-BBEE Structural Demographics
+                                            Compliance Sheet
+                                        </option>
+                                        <option>
+                                            Impact Passport Global Acceleration
+                                            Matrix Audit
+                                        </option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label
+                                        style="
+                                            display: block;
+                                            font-size: 0.8rem;
+                                            font-weight: 600;
+                                            margin-bottom: 0.25rem;
+                                        "
+                                        >Temporal Window Parameter</label
+                                    >
+                                    <select
+                                        class="filter-dropdown-select"
+                                        style="width: 100%"
+                                    >
+                                        <option>
+                                            Current Operational Quarter (Q2
+                                            2026)
+                                        </option>
+                                        <option>
+                                            Full Year Historical Sequence (2025
+                                            Ledger)
+                                        </option>
+                                    </select>
+                                </div>
+                                <button
+                                    class="btn-primary-apply"
+                                    style="
+                                        width: 100%;
+                                        text-align: center;
+                                        display: block;
+                                    "
+                                    onclick="
+                                        alert(
+                                            'Prototype Document Generation Engine: Report configuration submitted to structural analytics compiler task runner threads.',
+                                        )
+                                    "
+                                >
+                                    Compile Governance Dataset
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section
+                        id="admin-user-management"
+                        class="dashboard-page admin-page"
+                        style="display: none"
+                    >
+                        <div class="page-header-block">
+                            <span class="admin-section-badge"
+                                >Access Protection Layer</span
+                            >
+                            <h2>
+                                Ecosystem Authentication & User Access
+                                Management
+                            </h2>
+                            <p>
+                                Control platform profiles, provision security
+                                clearance tier vectors, and handle cluster
+                                role-based validation enforcement protocols.
+                            </p>
+                        </div>
+                        <div class="content-block-panel">
+                            <h4 style="margin-bottom: 1rem">
+                                Active Administrative & Advisory Account
+                                Profiles
+                            </h4>
+                            <div
+                                style="
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 0.5rem;
+                                    font-size: 0.85rem;
+                                "
+                            >
+                                <div
+                                    style="
+                                        padding: 0.5rem;
+                                        background: #fdfdfd;
+                                        border: 1px solid #eef2f2;
+                                        border-radius: 6px;
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+                                    "
+                                >
+                                    <span
+                                        ><strong
+                                            >Staff Agent: Thabo Mbeki</strong
+                                        >
+                                        (thabo@asezco.co.za)</span
+                                    >
+                                    <span
+                                        style="
+                                            font-size: 0.75rem;
+                                            background: #bfdbfe;
+                                            color: #1e3a8a;
+                                            padding: 0.15rem 0.4rem;
+                                            border-radius: 4px;
+                                            font-weight: 600;
+                                        "
+                                        >Super Admin</span
+                                    >
+                                </div>
+                                <div
+                                    style="
+                                        padding: 0.5rem;
+                                        background: #fdfdfd;
+                                        border: 1px solid #eef2f2;
+                                        border-radius: 6px;
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+                                    "
+                                >
+                                    <span
+                                        ><strong
+                                            >Consultant Operator: Elena
+                                            Rostova</strong
+                                        >
+                                        (elena@asezco.co.za)</span
+                                    >
+                                    <span
+                                        style="
+                                            font-size: 0.75rem;
+                                            background: #bfdbfe;
+                                            color: #1e3a8a;
+                                            padding: 0.15rem 0.4rem;
+                                            border-radius: 4px;
+                                            font-weight: 600;
+                                        "
+                                        >Auditor Analyst</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+
+                <nav
+                    class="mobile-tray-nav"
+                    aria-label="Mobile Navigation Drawer Shortcut Bar"
+                >
+                    <button
+                        class="mobile-tray-item active"
+                        data-page="home-dashboard"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            width="20"
+                            height="20"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                            />
+                        </svg>
+                        <span class="tray-label">Home</span>
+                    </button>
+                    <button
+                        class="mobile-tray-item"
+                        data-page="procurement-opportunities"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            width="20"
+                            height="20"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="M21 21l-4.35-4.35" />
+                        </svg>
+                        <span class="tray-label">Ops</span>
+                    </button>
+                    <button
+                        class="mobile-tray-item"
+                        data-page="contracts-history"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            width="20"
+                            height="20"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                            />
+                        </svg>
+                        <span class="tray-label">Contracts</span>
+                    </button>
+                    <button class="mobile-tray-item" data-page="peer-network">
+                        <svg
+                            viewBox="0 0 24 24"
+                            width="20"
+                            height="20"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path d="M17 21v-2a4 4 0 0 0-3-3.87" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        <span class="tray-label">Network</span>
+                    </button>
+                    <button
+                        class="mobile-tray-item"
+                        data-page="notifications-alerts"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            width="20"
+                            height="20"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"
+                            />
+                        </svg>
+                        <span class="tray-label">Alerts</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <div
+            class="modal-backdrop-overlay"
+            id="expressInterestModal"
+            style="display: none"
+        >
+            <div class="modal-surface-card animate-slide-up">
+                <div class="modal-layout-header">
+                    <h4 class="modal-heading-title" id="eoiModalTitle">
+                        Submit Expression of Commercial Interest
+                    </h4>
+                    <button class="modal-close-x-btn" id="closeEoiModalBtn">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-scrollable-body">
+                    <div class="modal-passport-snapshot-box">
+                        <div
+                            style="
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                margin-bottom: 0.5rem;
+                            "
+                        >
+                            <span
+                                style="
+                                    font-size: 0.75rem;
+                                    font-weight: 600;
+                                    text-transform: uppercase;
+                                    letter-spacing: 0.05em;
+                                    color: var(--color-primary);
+                                "
+                                >Impact Passport Attestation Vector</span
+                            >
+                            <span
+                                style="
+                                    font-size: 0.75rem;
+                                    background: rgba(0, 90, 91, 0.08);
+                                    color: var(--color-primary);
+                                    padding: 0.15rem 0.4rem;
+                                    border-radius: 4px;
+                                    font-weight: 600;
+                                "
+                                >Level 3 Secure Track Attached</span
+                            >
+                        </div>
+                        <p
+                            style="
+                                margin: 0;
+                                font-size: 0.85rem;
+                                color: var(--color-text-dark);
+                            "
+                            id="eoiModalPassportLine"
+                        >
+                            Apex Construction &bull; Verified Structural
+                            Supplier Profile (60% Progress Strength Attestation
+                            Score)
+                        </p>
+                    </div>
+
+                    <div style="margin-bottom: 1.25rem">
+                        <label class="modal-form-field-label"
+                            >Ecosystem Framework Capability Statement</label
+                        >
+                        <textarea
+                            class="modal-form-textarea"
+                            id="eoiModalMessageInp"
+                            rows="3"
+                            placeholder="Detail specific asset readiness alignment parameters or machine scheduling availabilities relevant to this targeted RFQ work scope line item..."
+                        ></textarea>
+                        <div
+                            style="
+                                display: flex;
+                                justify-content: space-between;
+                                margin-top: 0.25rem;
+                                font-size: 0.75rem;
+                                color: var(--color-text-muted);
+                            "
+                        >
+                            <span
+                                >Maintain clear, precise commercial
+                                terminology.</span
+                            >
+                            <span id="eoiModalCharCounter">0 / 300 words</span>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions-layout-footer-strip">
+                        <button
+                            class="btn-save-toggle"
+                            id="cancelEoiActionBtn"
+                            style="padding: 0.6rem 1.25rem"
+                        >
+                            Cancel Transmission
+                        </button>
+                        <button
+                            class="btn-primary-apply"
+                            id="submitEoiActionBtn"
+                            style="padding: 0.6rem 1.5rem"
+                        >
+                            Transmit Expressions Pack
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="modal-backdrop-overlay"
+            id="profileEditModal"
+            style="display: none"
+        >
+            <div
+                class="modal-surface-card animate-slide-up"
+                style="max-width: 550px"
+            >
+                <div class="modal-layout-header">
+                    <h4 class="modal-heading-title">
+                        Modify Business Profile Parameters
+                    </h4>
+                    <button
+                        class="modal-close-x-btn"
+                        onclick="closeProfileEditModal()"
+                    >
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-scrollable-body">
+                    <form
+                        id="profileEditForm"
+                        onsubmit="
+                            event.preventDefault();
+                            saveProfileFormChanges();
+                        "
+                    >
+                        <div
+                            style="
+                                display: grid;
+                                grid-template-columns: 1fr 1fr;
+                                gap: 1rem;
+                                margin-bottom: 1rem;
+                            "
+                            class="mobile-collapse-grid"
+                        >
+                            <div>
+                                <label class="modal-form-field-label"
+                                    >Registered Corporate Name</label
+                                >
+                                <input
+                                    type="text"
+                                    class="modal-form-text-input"
+                                    id="editInpBizName"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label class="modal-form-field-label"
+                                    >Ecosystem Trade Category</label
+                                >
+                                <input
+                                    type="text"
+                                    class="modal-form-text-input"
+                                    id="editInpBizType"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1rem">
+                            <label class="modal-form-field-label"
+                                >Company Vision Description Statement (Max 200
+                                words)</label
+                            >
+                            <textarea
+                                class="modal-form-textarea"
+                                id="editInpDesc"
+                                rows="4"
+                                maxlength="1000"
+                                required
+                            ></textarea>
+                            <div
+                                id="editFormCharCounter"
+                                style="
+                                    font-size: 0.7rem;
+                                    text-align: right;
+                                    color: var(--color-text-muted);
+                                    margin-top: 0.2rem;
+                                "
+                            >
+                                0 / 200 Words
+                            </div>
+                        </div>
+                        <div
+                            style="
+                                display: grid;
+                                grid-template-columns: 1fr 1fr;
+                                gap: 1rem;
+                                margin-bottom: 1.25rem;
+                            "
+                            class="mobile-collapse-grid"
+                        >
+                            <div>
+                                <label class="modal-form-field-label"
+                                    >Contact Handset</label
+                                >
+                                <input
+                                    type="text"
+                                    class="modal-form-text-input"
+                                    id="editInpPhone"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label class="modal-form-field-label"
+                                    >WhatsApp Channel</label
+                                >
+                                <input
+                                    type="text"
+                                    class="modal-form-text-input"
+                                    id="editInpWhatsapp"
+                                />
+                            </div>
+                        </div>
+                        <div class="modal-actions-layout-footer-strip">
+                            <button
+                                type="button"
+                                class="btn-save-toggle"
+                                onclick="closeProfileEditModal()"
+                            >
+                                Discard Edits
+                            </button>
+                            <button type="submit" class="btn-primary-apply">
+                                Commit Update Package
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="modal-backdrop-overlay"
+            id="serviceEditModal"
+            style="display: none"
+        >
+            <div
+                class="modal-surface-card animate-slide-up"
+                style="max-width: 450px"
+            >
+                <div class="modal-layout-header">
+                    <h4 class="modal-heading-title">
+                        Append New Commercial Offering Listing
+                    </h4>
+                    <button
+                        class="modal-close-x-btn"
+                        onclick="closeServiceModal()"
+                    >
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-scrollable-body">
+                    <form
+                        id="serviceAddForm"
+                        onsubmit="
+                            event.preventDefault();
+                            commitNewServiceEntry();
+                        "
+                    >
+                        <div style="margin-bottom: 1rem">
+                            <label class="modal-form-field-label"
+                                >Service / Offering Product Title</label
+                            >
+                            <input
+                                type="text"
+                                class="modal-form-text-input"
+                                id="srvInpTitle"
+                                placeholder="e.g. Precision CNC Plasma Profiling"
+                                required
+                            />
+                        </div>
+                        <div style="margin-bottom: 1rem">
+                            <label class="modal-form-field-label"
+                                >Scope Description Capacity Parameters</label
+                            >
+                            <textarea
+                                class="modal-form-textarea"
+                                id="srvInpDesc"
+                                rows="3"
+                                placeholder="Detail thickness metrics, structural run boundaries, tolerances, etc..."
+                                required
+                            ></textarea>
+                        </div>
+                        <div style="margin-bottom: 1.25rem">
+                            <label class="modal-form-field-label"
+                                >Estimated Rate/Commercial Pricing Framework
+                                Structure Range</label
+                            >
+                            <input
+                                type="text"
+                                class="modal-form-text-input"
+                                id="srvInpRates"
+                                placeholder="e.g. R450/hr baseline pricing or Variable per template weight matrix"
+                            />
+                        </div>
+                        <div class="modal-actions-layout-footer-strip">
+                            <button
+                                type="button"
+                                class="btn-save-toggle"
+                                onclick="closeServiceModal()"
+                            >
+                                Abort
+                            </button>
+                            <button type="submit" class="btn-primary-apply">
+                                Inject Service Entry
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="modal-backdrop-overlay"
+            id="shareProfileModal"
+            style="display: none"
+        >
+            <div
+                class="modal-surface-card animate-slide-up"
+                style="max-width: 400px; text-align: center"
+            >
+                <div class="modal-layout-header">
+                    <h4 class="modal-heading-title" style="text-align: left">
+                        Ecosystem Digital Storefront Share Channel
+                    </h4>
+                    <button
+                        class="modal-close-x-btn"
+                        onclick="closeShareProfileModal()"
+                    >
+                        &times;
+                    </button>
+                </div>
+                <div
+                    class="modal-scrollable-body"
+                    style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 1.25rem;
+                    "
+                >
+                    <p
+                        style="
+                            font-size: 0.85rem;
+                            color: var(--color-text-muted);
+                            margin: 0;
+                        "
+                    >
+                        Scan the cryptographically validated ecosystem QR badge
+                        code layout below to instantly share your verified
+                        enterprise Impact Passport record statement with
+                        out-of-network manufacturing groups and municipal
+                        procurement supply controllers.
+                    </p>
+                    <div
+                        id="qrcodeTargetContainer"
+                        style="
+                            padding: 1rem;
+                            background: white;
+                            border: 1px solid #eef2f2;
+                            border-radius: 12px;
+                        "
+                    ></div>
+                    <div style="width: 100%">
+                        <input
+                            type="text"
+                            id="shareProfileStaticUrlField"
+                            readonly
+                            style="
+                                width: 100%;
+                                padding: 0.5rem;
+                                text-align: center;
+                                font-family: monospace;
+                                font-size: 0.75rem;
+                                background: #f4f8f7;
+                                border: 1px solid #dbe4e5;
+                                border-radius: 6px;
+                                color: var(--color-text-dark);
+                            "
+                        />
+                    </div>
+                    <button
+                        class="btn-primary-apply"
+                        style="width: 100%"
+                        onclick="copyShareLinkToClipboard()"
+                    >
+                        Copy Local URL Token Link
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script src="dashboard-smme.js"></script>
+    </body>
+</html>

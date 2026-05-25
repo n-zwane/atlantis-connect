@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Gateway - Atlantis Connect</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="portal.css" />
+    </head>
+    <body>
+        <a
+            href="index.html"
+            class="back-home-btn"
+            aria-label="Return to landing page"
+        >
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Back to Home
+        </a>
+
+        <main class="portal-wrapper">
+            <div class="portal-container">
+                <div class="portal-card">
+                    <div class="portal-tabs">
+                        <button class="tab-btn active" data-tab="login">
+                            Sign In
+                        </button>
+                        <button class="tab-btn" data-tab="register">
+                            Create Account
+                        </button>
+                    </div>
+
+                    <form id="loginForm" class="portal-form active">
+                        <div class="form-group">
+                            <label for="loginEmail">Email Address</label>
+                            <input
+                                type="email"
+                                id="loginEmail"
+                                required
+                                placeholder="name@example.com"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input
+                                type="password"
+                                id="loginPassword"
+                                required
+                                placeholder="••••••••"
+                            />
+                        </div>
+                        <button type="submit" class="btn-submit">
+                            Sign In to Dashboard
+                        </button>
+                    </form>
+
+                    <form id="registerForm" class="portal-form">
+                        <div class="form-group">
+                            <label for="regName"
+                                >Full Name / Business Name</label
+                            >
+                            <input
+                                type="text"
+                                id="regName"
+                                placeholder="Enter identity label"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail">Email Address</label>
+                            <input
+                                type="email"
+                                id="regEmail"
+                                placeholder="name@example.com"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="regRole">Primary Identity Sector</label>
+                            <select id="regRole">
+                                <option value="seeker">Job Seeker</option>
+                                <option value="smme">
+                                    SMME / Business Enterprise
+                                </option>
+                                <option value="employer">
+                                    Industrial Employer
+                                </option>
+                                <option value="institution">
+                                    Training Institution
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword">Password</label>
+                            <input
+                                type="password"
+                                id="regPassword"
+                                placeholder="Minimum 8 characters"
+                            />
+                        </div>
+                        <button type="submit" class="btn-submit">
+                            Complete Registration
+                        </button>
+                    </form>
+                </div>
+
+                <div class="mvp-bypass-zone">
+                    <div class="mvp-divider">
+                        <span>MVP Demo Direct Pipeline (No Auth Needed)</span>
+                    </div>
+                    <p class="mvp-instruction">
+                        Select your target persona profile below to bypass
+                        verification security parameters and review dedicated
+                        environment mockups:
+                    </p>
+
+                    <div class="mvp-grid">
+                        <button
+                            class="mvp-btn"
+                            data-target="dashboard-seeker.html"
+                        >
+                            <svg
+                                class="mvp-icon"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                />
+                            </svg>
+                            <span>Job Seeker Hub</span>
+                        </button>
+                        <button
+                            class="mvp-btn"
+                            data-target="dashboard-smme.html"
+                        >
+                            <svg
+                                class="mvp-icon"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5"
+                                />
+                            </svg>
+                            <span>SMME Gateway</span>
+                        </button>
+                        <button
+                            class="mvp-btn"
+                            data-target="dashboard-employer.html"
+                        >
+                            <svg
+                                class="mvp-icon"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                                />
+                            </svg>
+                            <span>Employer Portal</span>
+                        </button>
+                        <button
+                            class="mvp-btn"
+                            data-target="dashboard-institution.html"
+                        >
+                            <svg
+                                class="mvp-icon"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                                />
+                            </svg>
+                            <span>Training Board</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script src="portal.js"></script>
+    </body>
+</html>

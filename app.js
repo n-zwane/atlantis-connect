@@ -53,3 +53,14 @@ document.addEventListener("DOMContentLoaded", () => {
         scrollObserver.observe(element);
     });
 });
+
+// Close mobile nav drawer when clicking any link item inside it
+const navLinks = document.querySelectorAll(".nav-link-item, .nav-buttons .btn");
+navLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+        if (navMenu.classList.contains("active")) {
+            navMenu.classList.remove("active");
+            menuToggle.setAttribute("aria-expanded", "false");
+        }
+    });
+});

@@ -59,3 +59,25 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+// --- MOBILE NAVIGATION DRAWER CONTROLLER ---
+const menuToggle = document.getElementById("menuToggle");
+const navMenu = document.getElementById("navMenu");
+const portalNavbar = document.getElementById("portalNavbar");
+
+if (menuToggle && navMenu) {
+    menuToggle.addEventListener("click", () => {
+        const isExpanded = menuToggle.getAttribute("aria-expanded") === "true";
+        menuToggle.setAttribute("aria-expanded", !isExpanded);
+        navMenu.classList.toggle("active");
+    });
+
+    // Close the navigation drawer if a click occurs outside the area
+    document.addEventListener("click", (event) => {
+        const isClickInsideNav = portalNavbar.contains(event.target);
+        if (!isClickInsideNav && navMenu.classList.contains("active")) {
+            navMenu.classList.remove("active");
+            menuToggle.setAttribute("aria-expanded", "false");
+        }
+    });
+}

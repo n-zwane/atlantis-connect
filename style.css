@@ -690,3 +690,155 @@ button:focus-visible {
         top: 0.5rem;
     }
 }
+
+/* --- FIXED FLOATING GLASSMORPHIC NAVBAR (Desktop Default) --- */
+.navbar {
+    position: fixed;
+    top: 1.25rem;
+    left: 5%;
+    width: 90%;
+    height: var(--navbar-height);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    background-color: rgba(15, 26, 28, 0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+    transition: var(--transition-smooth);
+}
+
+.navbar.scrolled {
+    top: 0.75rem;
+    background-color: rgba(15, 26, 28, 0.9);
+    border-color: rgba(15, 159, 104, 0.3);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+}
+
+/* Base Desktop Nav Links styling */
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    margin-right: 2rem;
+}
+
+.nav-link-item {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition-smooth);
+}
+
+.nav-link-item:hover {
+    color: var(--color-accent);
+}
+
+/* --- ADAPTIVE RESPONSIVE MEDIA QUERIES --- */
+@media (max-width: 1024px) {
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --navbar-height: 70px;
+    }
+
+    .navbar {
+        top: 1rem;
+        left: 4%;
+        width: 92%;
+        border-radius: 12px;
+    }
+
+    .navbar.scrolled {
+        top: 0.5rem;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    /* Fixed Layout: Break out of the floating parent dimensions safely */
+    .nav-menu {
+        position: fixed;
+        top: calc(-1rem - 2px); /* Offsets the navbar floating top margin */
+        right: -110%;
+        width: 85vw;
+        max-width: 360px;
+        height: 100vh;
+        background-color: #0f1a1c; /* Solid fall-back match to --color-bg-dark */
+        padding: 6rem 2rem 2rem 2rem;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+        transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-top-left-radius: 12px;
+        border-bottom-left-radius: 12px;
+    }
+
+    .nav-menu.active {
+        right: calc(
+            -4vw - 2px
+        ); /* Snaps neatly to the screen edge regardless of floating parent margins */
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-right: 0;
+        padding: 0;
+    }
+
+    .nav-link-item {
+        font-size: 1.25rem;
+        display: block;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .nav-buttons .btn {
+        width: 100%;
+        padding: 0.85rem;
+        font-size: 1.05rem;
+    }
+
+    .hero-ctas {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .btn-cta {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .how-it-works {
+        padding: 5rem 1.5rem;
+    }
+}

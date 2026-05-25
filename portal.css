@@ -251,3 +251,439 @@ body {
         display: inline-flex;
     }
 }
+
+:root {
+    --color-primary: #005a5b;
+    --color-accent: #0f9f68;
+    --color-accent-hover: #0c8556;
+    --color-bg-deep: #0f1a1c;
+    --color-bg-card: #ffffff;
+    --color-text-dark: #1a2b2c;
+    --color-text-muted: #627779;
+    --font-heading: "Space Grotesk", sans-serif;
+    --font-body: "Inter", sans-serif;
+    --transition-fast: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--color-bg-deep);
+    color: var(--color-text-dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* Fixed: Changed to column to stack back-button cleanly above the card on short viewports */
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    position: relative;
+}
+
+/* --- BACK BUTTON ADJUSTMENTS --- */
+.back-home-btn {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: var(--transition-fast);
+    z-index: 10;
+}
+
+.back-home-btn:hover {
+    color: var(--color-accent);
+}
+
+/* --- PORTAL MAIN STRUCTURAL LAYOUT --- */
+.portal-wrapper {
+    width: 100%;
+    max-width: 480px;
+    margin-top: 2rem; /* Buffer space to prevent overlap from absolute positioning */
+}
+
+.portal-card {
+    background-color: var(--color-bg-card);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* --- TAB MANAGEMENT UI --- */
+.portal-tabs {
+    display: flex;
+    border-bottom: 2px solid #eef2f2;
+    margin-bottom: 2rem;
+}
+
+.tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 1rem;
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    position: relative;
+    transition: var(--transition-fast);
+}
+
+.tab-btn.active {
+    color: var(--color-primary);
+}
+
+.tab-btn.active::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-accent);
+}
+
+/* --- FORM MECHANICS --- */
+.portal-form {
+    display: none;
+}
+
+.portal-form.active {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--color-text-dark);
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid #d1dcdb;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--color-text-dark);
+    background-color: #ffffff;
+    transition: var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(15, 159, 104, 0.15);
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--color-primary);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    margin-top: 0.5rem;
+}
+
+.btn-submit:hover {
+    background-color: #004748;
+}
+
+/* --- MVP SCREEN CONTROL OVERRIDES --- */
+.mvp-bypass-zone {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px dashed rgba(0, 90, 91, 0.15);
+}
+
+.mvp-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--color-accent);
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.mvp-divider::before,
+.mvp-divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px dashed rgba(15, 159, 104, 0.3);
+}
+
+.mvp-divider span {
+    padding: 0 1rem;
+}
+
+.mvp-instruction {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+}
+
+.mvp-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        2,
+        1fr
+    ); /* Default 2-column on desktop grids */
+    gap: 1rem;
+}
+
+.mvp-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: #f4f8f7;
+    border: 1px solid rgba(0, 90, 91, 0.08);
+    border-radius: 10px;
+    color: var(--color-text-dark);
+    cursor: pointer;
+    text-align: left;
+    transition: var(--transition-fast);
+}
+
+.mvp-btn:hover {
+    background: #eef4f2;
+    border-color: var(--color-accent);
+}
+
+.mvp-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: var(--color-accent);
+}
+
+.mvp-btn span {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* --- ADAPTIVE TARGET MEDIA QUERIES --- */
+@media (max-width: 540px) {
+    body {
+        justify-content: flex-start; /* Prevent top/bottom layout cutoffs */
+        padding: 6rem 1rem 3rem 1rem; /* Generous spacing top-deck for absolute home button placement */
+    }
+
+    .back-home-btn {
+        top: 1.5rem;
+        left: 50%;
+        transform: translateX(
+            -50%
+        ); /* Centers home navigation cleanly above form card layout UI */
+    }
+
+    .portal-wrapper {
+        margin-top: 0;
+    }
+
+    .portal-card {
+        padding: 2rem 1.5rem; /* Maximize structural touch room space on screen borders */
+    }
+
+    .mvp-grid {
+        grid-template-columns: 1fr; /* Drop cleanly down to responsive stack layout blocks */
+        gap: 0.75rem;
+    }
+}
+
+/* --- COMPONENT STYLING: PORTAL GLASSMORPHIC NAVBAR --- */
+.portal-navbar {
+    position: fixed;
+    top: 1.25rem;
+    left: 5%;
+    width: 90%;
+    height: 64px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    background-color: rgba(15, 26, 28, 0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 0 1.5rem;
+}
+
+.nav-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand-name {
+    font-family: var(--font-heading);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+}
+
+/* Hamburger Button Reset & Baseline */
+.menu-toggle {
+    display: none; /* Hidden on desktop viewports */
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    z-index: 1100;
+}
+
+.hamburger,
+.hamburger::before,
+.hamburger::after {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.hamburger {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.hamburger::before {
+    top: -8px;
+    left: 0;
+}
+.hamburger::after {
+    top: 8px;
+    left: 0;
+}
+
+/* Active Menu Toggle Transformations (Morphing into an 'X') */
+.menu-toggle[aria-expanded="true"] .hamburger {
+    background-color: transparent;
+}
+
+.menu-toggle[aria-expanded="true"] .hamburger::before {
+    transform: rotate(45deg);
+    top: 0;
+}
+
+.menu-toggle[aria-expanded="true"] .hamburger::after {
+    transform: rotate(-45deg);
+    top: 0;
+}
+
+/* Desktop Fallback Hidden State */
+.nav-links {
+    list-style: none;
+}
+
+.nav-link-item {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+}
+
+.nav-link-item:hover {
+    color: var(--color-accent);
+}
+
+/* Adjust Main Form Layout to stay safe from overlapping fixed navbar */
+body {
+    padding-top: 6.5rem;
+}
+
+/* --- RESPONSIVE HAMBURGER DESIGN OVERRIDES --- */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-menu {
+        position: fixed;
+        top: calc(-1.25rem - 1px);
+        right: -110%;
+        width: 80vw;
+        max-width: 320px;
+        height: 100vh;
+        background-color: #0f1a1c;
+        padding: 6rem 2rem 2rem 2rem;
+        box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+        transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        border-top-left-radius: 16px;
+        border-bottom-left-radius: 16px;
+    }
+
+    .nav-menu.active {
+        right: calc(
+            -5vw - 1px
+        ); /* Matches parent structural scale boundary offset */
+    }
+
+    .nav-link-item {
+        font-size: 1.15rem;
+        width: 100%;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+}
+
+@media (max-width: 540px) {
+    .portal-navbar {
+        top: 0.75rem;
+        left: 4%;
+        width: 92%;
+    }
+
+    body {
+        padding-top: 5.5rem;
+        justify-content: flex-start;
+    }
+
+    .nav-menu {
+        top: calc(-0.75rem - 1px);
+    }
+
+    .nav-menu.active {
+        right: calc(-4vw - 1px);
+    }
+}

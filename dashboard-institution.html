@@ -1,0 +1,1591 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width,initial-scale=1.0,viewport-fit=cover"
+        />
+        <title>Institution Portal — Atlantis Connect</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap"
+            rel="stylesheet"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://unpkg.com/feather-icons"></script>
+        <link rel="stylesheet" href="dashboard-institution.css" />
+    </head>
+    <body>
+        <div class="app-container">
+            <!-- SIDEBAR -->
+            <aside class="sidebar" id="desktopSidebar">
+                <div class="sidebar-brand">
+                    <span class="brand-title">Atlantis Connect</span>
+                    <span class="brand-sub">SEZ Workforce Hub</span>
+                </div>
+                <div class="inst-profile-block">
+                    <div class="inst-avatar">WTC</div>
+                    <div class="inst-meta">
+                        <span class="inst-name">West Coast TVET</span>
+                        <span class="inst-type">TVET College</span>
+                    </div>
+                    <span class="verified-chip"
+                        ><i data-feather="check-circle"></i> Verified</span
+                    >
+                </div>
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" data-target="page-home">
+                        <i data-feather="home"></i>Home
+                    </button>
+                    <button class="nav-item" data-target="page-programmes">
+                        <i data-feather="book"></i>Programme Listings
+                    </button>
+                    <button class="nav-item" data-target="page-participants">
+                        <i data-feather="users"></i>Enrolled Participants
+                    </button>
+                    <button class="nav-item" data-target="page-outcomes">
+                        <i data-feather="trending-up"></i>Graduate Outcomes
+                    </button>
+                    <button class="nav-item" data-target="page-signals">
+                        <i data-feather="activity"></i>Labour Market Signals
+                    </button>
+                    <button class="nav-item" data-target="page-partnerships">
+                        <i data-feather="briefcase"></i>Employer Partnerships
+                    </button>
+                    <button class="nav-item" data-target="page-notifications">
+                        <i data-feather="bell"></i>Notifications &amp; Alerts
+                    </button>
+                </nav>
+                <div class="sidebar-footer">
+                    <button class="footer-btn">
+                        <i data-feather="help-circle"></i>Help &amp; Support
+                    </button>
+                    <a
+                        href="#"
+                        class="logout-trigger-btn"
+                        onclick="
+                            handleLogout();
+                            return false;
+                        "
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                            />
+                        </svg>
+                        <span>Sign Out</span>
+                    </a>
+                </div>
+            </aside>
+
+            <!-- MOBILE DRAWER -->
+            <div
+                class="drawer-overlay"
+                id="drawerOverlay"
+                onclick="toggleMobileDrawer()"
+            ></div>
+            <div class="mobile-drawer" id="mobileDrawer">
+                <div class="drawer-top">
+                    <h3>Atlantis Connect</h3>
+                    <button class="icon-btn" onclick="toggleMobileDrawer()">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="inst-profile-block inside-drawer">
+                    <div class="inst-avatar">WTC</div>
+                    <div class="inst-meta">
+                        <span class="inst-name">West Coast TVET</span>
+                        <span class="inst-type">TVET College</span>
+                    </div>
+                </div>
+                <nav class="sidebar-nav drawer-nav">
+                    <button
+                        class="nav-item active"
+                        data-target="page-home"
+                        onclick="handleMobileNav(this)"
+                    >
+                        <i data-feather="home"></i>Home
+                    </button>
+                    <button
+                        class="nav-item"
+                        data-target="page-programmes"
+                        onclick="handleMobileNav(this)"
+                    >
+                        <i data-feather="book"></i>Programmes
+                    </button>
+                    <button
+                        class="nav-item"
+                        data-target="page-participants"
+                        onclick="handleMobileNav(this)"
+                    >
+                        <i data-feather="users"></i>Participants
+                    </button>
+                    <button
+                        class="nav-item"
+                        data-target="page-outcomes"
+                        onclick="handleMobileNav(this)"
+                    >
+                        <i data-feather="trending-up"></i>Outcomes
+                    </button>
+                    <button
+                        class="nav-item"
+                        data-target="page-signals"
+                        onclick="handleMobileNav(this)"
+                    >
+                        <i data-feather="activity"></i>Market Signals
+                    </button>
+                    <button
+                        class="nav-item"
+                        data-target="page-partnerships"
+                        onclick="handleMobileNav(this)"
+                    >
+                        <i data-feather="briefcase"></i>Partnerships
+                    </button>
+                    <button
+                        class="nav-item"
+                        data-target="page-notifications"
+                        onclick="handleMobileNav(this)"
+                    >
+                        <i data-feather="bell"></i>Notifications
+                    </button>
+                </nav>
+                <div class="sidebar-footer">
+                    <button class="footer-btn">
+                        <i data-feather="help-circle"></i>Help &amp; Support
+                    </button>
+                    <button class="footer-btn logout">
+                        <i data-feather="log-out"></i>Log Out
+                    </button>
+                </div>
+            </div>
+
+            <!-- MAIN -->
+            <div class="main-wrapper">
+                <header class="top-bar">
+                    <div class="top-bar-left">
+                        <span class="greeting" id="timeGreeting"
+                            >Good morning, Andile</span
+                        >
+                        <span class="top-context"
+                            >Atlantis SEZ Workforce Development Portal</span
+                        >
+                    </div>
+                    <div class="top-bar-right">
+                        <button
+                            class="notif-bell"
+                            onclick="switchPage('page-notifications')"
+                        >
+                            <i data-feather="bell"></i>
+                            <span class="bell-badge" id="bellBadge">3</span>
+                        </button>
+                        <div class="user-chip">
+                            <span class="user-name">Andile Cele</span>
+                            <span class="user-role">Programme Director</span>
+                        </div>
+                        <button
+                            class="hamburger-btn"
+                            onclick="toggleMobileDrawer()"
+                        >
+                            <i data-feather="menu"></i>
+                        </button>
+                    </div>
+                </header>
+
+                <main class="content-area">
+                    <!-- PAGE 1: HOME -->
+                    <section class="page-section active" id="page-home">
+                        <div class="home-banner">
+                            <div class="home-banner-inner">
+                                <h1 id="bannerGreeting">
+                                    Good morning, Andile
+                                </h1>
+                                <p class="inst-name-display">
+                                    West Coast TVET College
+                                </p>
+                                <p class="banner-context" id="bannerContext">
+                                    Electrical Installation is the most
+                                    in-demand skill in the SEZ right now — you
+                                    have a programme aligned to this.
+                                </p>
+                            </div>
+                            <div
+                                class="banner-pattern"
+                                aria-hidden="true"
+                            ></div>
+                        </div>
+
+                        <div class="stats-row">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i data-feather="book-open"></i>
+                                </div>
+                                <div class="stat-body">
+                                    <span class="stat-num">6</span
+                                    ><span class="stat-lbl"
+                                        >Active Programmes</span
+                                    >
+                                </div>
+                                <span class="stat-trend neutral">Stable</span>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i data-feather="users"></i>
+                                </div>
+                                <div class="stat-body">
+                                    <span class="stat-num">184</span
+                                    ><span class="stat-lbl"
+                                        >Total Enrolled</span
+                                    >
+                                </div>
+                                <span class="stat-trend up">+14% m/m</span>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i data-feather="award"></i>
+                                </div>
+                                <div class="stat-body">
+                                    <span class="stat-num">28</span
+                                    ><span class="stat-lbl"
+                                        >Graduates This Month</span
+                                    >
+                                </div>
+                                <span class="stat-trend up">+8% m/m</span>
+                            </div>
+                            <div class="stat-card kpi-green">
+                                <div class="stat-icon accent">
+                                    <i data-feather="check-circle"></i>
+                                </div>
+                                <div class="stat-body">
+                                    <span class="stat-num">74%</span
+                                    ><span class="stat-lbl"
+                                        >Placement Rate</span
+                                    >
+                                </div>
+                                <span class="stat-trend up">+3.2% YTD</span>
+                            </div>
+                            <div class="stat-card kpi-amber">
+                                <div class="stat-icon amber-icon">
+                                    <i data-feather="target"></i>
+                                </div>
+                                <div class="stat-body">
+                                    <span class="stat-num">88%</span
+                                    ><span class="stat-lbl"
+                                        >Labour Alignment</span
+                                    >
+                                </div>
+                                <span class="stat-trend up">Excellent</span>
+                            </div>
+                        </div>
+
+                        <div class="home-grid">
+                            <div class="home-main-col">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3>Programme Health Overview</h3>
+                                        <button
+                                            class="btn btn-sm btn-ghost"
+                                            onclick="
+                                                switchPage('page-programmes')
+                                            "
+                                        >
+                                            View all
+                                        </button>
+                                    </div>
+                                    <div id="progHealthList"></div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3>Graduate Outcome Highlights</h3>
+                                        <button
+                                            class="btn btn-sm btn-ghost"
+                                            onclick="
+                                                switchPage('page-outcomes')
+                                            "
+                                        >
+                                            View all
+                                        </button>
+                                    </div>
+                                    <div
+                                        class="outcome-highlights-grid"
+                                        id="outcomeHighlights"
+                                    ></div>
+                                </div>
+                            </div>
+                            <div class="home-side-col">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3>Labour Market Demands</h3>
+                                        <button
+                                            class="btn btn-sm btn-ghost"
+                                            onclick="switchPage('page-signals')"
+                                        >
+                                            Full signals
+                                        </button>
+                                    </div>
+                                    <div id="homeDemandList"></div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3>
+                                            Upcoming Sessions &amp; Deadlines
+                                        </h3>
+                                    </div>
+                                    <div id="remindersList"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- PAGE 2: PROGRAMMES -->
+                    <section class="page-section" id="page-programmes">
+                        <div class="page-title-row">
+                            <div>
+                                <h2>Programme Listings</h2>
+                                <p class="page-subtitle">
+                                    Create, manage, and publish your training
+                                    programmes to the Atlantis Connect platform.
+                                </p>
+                            </div>
+                            <button
+                                class="btn btn-primary"
+                                onclick="openProgModal()"
+                            >
+                                <i data-feather="plus"></i>Create New Programme
+                            </button>
+                        </div>
+                        <div class="summary-strip">
+                            <div class="sstrip-item">
+                                <span class="sstrip-num">12</span
+                                ><span class="sstrip-lbl">Published</span>
+                            </div>
+                            <div class="sstrip-item">
+                                <span class="sstrip-num">2</span
+                                ><span class="sstrip-lbl">Drafts</span>
+                            </div>
+                            <div class="sstrip-item">
+                                <span class="sstrip-num">210</span
+                                ><span class="sstrip-lbl">Total Capacity</span>
+                            </div>
+                            <div class="sstrip-item">
+                                <span class="sstrip-num">87.6%</span
+                                ><span class="sstrip-lbl">Fill Rate</span>
+                            </div>
+                        </div>
+                        <div class="tab-bar">
+                            <button
+                                class="tab-btn active"
+                                data-group="prog"
+                                data-pane="prog-active"
+                            >
+                                Active
+                            </button>
+                            <button
+                                class="tab-btn"
+                                data-group="prog"
+                                data-pane="prog-draft"
+                            >
+                                Drafts
+                            </button>
+                            <button
+                                class="tab-btn"
+                                data-group="prog"
+                                data-pane="prog-completed"
+                            >
+                                Completed
+                            </button>
+                            <button
+                                class="tab-btn"
+                                data-group="prog"
+                                data-pane="prog-archived"
+                            >
+                                Archived
+                            </button>
+                        </div>
+                        <div class="tab-pane active" id="prog-active">
+                            <div
+                                class="prog-cards-grid"
+                                id="progCardsGrid"
+                            ></div>
+                        </div>
+                        <div class="tab-pane" id="prog-draft">
+                            <div class="empty-state">
+                                <i data-feather="file-text"></i>
+                                <h4>No Draft Programmes</h4>
+                                <p>
+                                    Programmes you save before publishing will
+                                    appear here.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="prog-completed">
+                            <div class="empty-state">
+                                <i data-feather="archive"></i>
+                                <h4>Completed Programmes</h4>
+                                <p>
+                                    Programmes that have concluded are
+                                    automatically linked to your Graduate
+                                    Outcomes data.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="prog-archived">
+                            <div class="empty-state">
+                                <i data-feather="folder"></i>
+                                <h4>No Archived Programmes</h4>
+                                <p>
+                                    Archived programmes are removed from public
+                                    view but kept for your records.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- PAGE 3: PARTICIPANTS -->
+                    <section class="page-section" id="page-participants">
+                        <div class="page-title-row">
+                            <div>
+                                <h2>Enrolled Participants</h2>
+                                <p class="page-subtitle">
+                                    Track progress, attendance, and readiness
+                                    across all your active programmes.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="summary-strip">
+                            <div class="sstrip-item">
+                                <span class="sstrip-num">184</span
+                                ><span class="sstrip-lbl">Enrolled</span>
+                            </div>
+                            <div class="sstrip-item green-accent">
+                                <span class="sstrip-num">162</span
+                                ><span class="sstrip-lbl">On Track</span>
+                            </div>
+                            <div class="sstrip-item amber-accent">
+                                <span class="sstrip-num">3</span
+                                ><span class="sstrip-lbl">At Risk</span>
+                            </div>
+                            <div class="sstrip-item">
+                                <span class="sstrip-num">19</span
+                                ><span class="sstrip-lbl"
+                                    >Awaiting Outcome</span
+                                >
+                            </div>
+                        </div>
+                        <div class="bulk-toolbar" id="bulkToolbar">
+                            <span id="bulkCount">0 selected</span>
+                            <div class="bulk-actions">
+                                <button
+                                    class="btn btn-sm btn-outline"
+                                    style="color: var(--accent)"
+                                    onclick="bulkMarkComplete()"
+                                >
+                                    <i data-feather="check"></i>Mark Complete
+                                </button>
+                                <button
+                                    class="btn btn-sm btn-outline"
+                                    onclick="bulkExport()"
+                                >
+                                    <i data-feather="download"></i>Export CSV
+                                </button>
+                                <button
+                                    class="btn btn-sm btn-outline"
+                                    style="color: var(--danger)"
+                                    onclick="clearBulkSelection()"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                        <div class="search-filter-card">
+                            <div class="search-wrap-row">
+                                <div class="search-wrap">
+                                    <i data-feather="search"></i>
+                                    <input
+                                        type="text"
+                                        id="participantSearch"
+                                        placeholder="Search by name, programme, or skill…"
+                                        oninput="filterParticipants()"
+                                    />
+                                </div>
+                            </div>
+                            <div class="filter-chips" id="participantChips">
+                                <button class="chip active" data-filter="all">
+                                    All
+                                </button>
+                                <button class="chip" data-filter="on-track">
+                                    On Track
+                                </button>
+                                <button class="chip" data-filter="at-risk">
+                                    At Risk
+                                </button>
+                                <button class="chip" data-filter="completed">
+                                    Completed
+                                </button>
+                                <button class="chip" data-filter="placed">
+                                    Placed
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                            class="participant-grid"
+                            id="participantGrid"
+                        ></div>
+                    </section>
+
+                    <!-- PAGE 4: OUTCOMES -->
+                    <section class="page-section" id="page-outcomes">
+                        <div class="page-title-row">
+                            <div>
+                                <h2>Graduate Outcomes</h2>
+                                <p class="page-subtitle">
+                                    What actually happened to your graduates —
+                                    placement rates, time to employment, and
+                                    employer feedback.
+                                </p>
+                            </div>
+                            <button
+                                class="btn btn-primary"
+                                onclick="generateOutcomeReport()"
+                            >
+                                <i data-feather="file-text"></i>Generate Report
+                            </button>
+                        </div>
+
+                        <div class="outcome-headline-banner">
+                            <div class="headline-stat">
+                                <span class="hl-label"
+                                    >Graduates This Year</span
+                                >
+                                <span class="hl-num">248</span>
+                            </div>
+                            <div class="headline-stat">
+                                <span class="hl-label">Placement Rate</span>
+                                <span class="hl-num green-text">74.2%</span>
+                            </div>
+                            <div class="headline-stat">
+                                <span class="hl-label"
+                                    >Avg. Time to Placement</span
+                                >
+                                <span class="hl-num blue-text"
+                                    >8.4<small> wks</small></span
+                                >
+                            </div>
+                            <div class="headline-interp">
+                                <i data-feather="info"></i>
+                                <span
+                                    >74% of your graduates secured employment or
+                                    further training within 12 weeks of
+                                    completing their programme — above the
+                                    national TVET average of 58%.</span
+                                >
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Placement Funnel</h3>
+                                <span class="card-sub-inline"
+                                    >Tracks where graduates drop out of the
+                                    pipeline between completion and
+                                    employment.</span
+                                >
+                            </div>
+                            <div id="placementFunnel"></div>
+                        </div>
+
+                        <div class="two-col-grid">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>Placements by Industry</h3>
+                                    <button class="btn btn-sm btn-ghost">
+                                        <i data-feather="download"></i>
+                                    </button>
+                                </div>
+                                <div class="chart-box">
+                                    <canvas id="sectorChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>Graduate Demographics</h3>
+                                    <button class="btn btn-sm btn-ghost">
+                                        <i data-feather="download"></i>
+                                    </button>
+                                </div>
+                                <div class="chart-box">
+                                    <canvas id="demoChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Individual Graduate Tracking</h3>
+                                <input
+                                    type="text"
+                                    class="inline-search"
+                                    placeholder="Search graduates…"
+                                    oninput="filterGrads(this.value)"
+                                />
+                            </div>
+                            <div class="table-wrap">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Graduate</th>
+                                            <th>Programme</th>
+                                            <th>Outcome</th>
+                                            <th>Verification</th>
+                                            <th style="text-align: right">
+                                                Actions
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="gradTableBody"></tbody>
+                                </table>
+                            </div>
+                            <div
+                                class="inline-detail-panel"
+                                id="gradDetailPanel"
+                            >
+                                <div class="idp-inner">
+                                    <div class="idp-header">
+                                        <h4 id="idpName">—</h4>
+                                        <button
+                                            class="btn btn-sm btn-ghost"
+                                            onclick="closeGradDetail()"
+                                        >
+                                            <i data-feather="x"></i>Close
+                                        </button>
+                                    </div>
+                                    <div class="idp-body">
+                                        <div class="idp-field">
+                                            <span class="idp-lbl">Employer</span
+                                            ><span
+                                                id="idpEmployer"
+                                                class="idp-val"
+                                                >—</span
+                                            >
+                                        </div>
+                                        <div class="idp-field">
+                                            <span class="idp-lbl">Role</span
+                                            ><span id="idpRole" class="idp-val"
+                                                >—</span
+                                            >
+                                        </div>
+                                        <div
+                                            class="idp-field"
+                                            style="
+                                                flex-direction: column;
+                                                gap: 0.3rem;
+                                            "
+                                        >
+                                            <span class="idp-lbl"
+                                                >Employer Feedback</span
+                                            >
+                                            <p
+                                                id="idpFeedback"
+                                                style="
+                                                    margin: 0;
+                                                    font-style: italic;
+                                                "
+                                            >
+                                                —
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Cohort Comparison</h3>
+                                <span class="card-sub-inline"
+                                    >Compare outcomes across different programme
+                                    cohorts.</span
+                                >
+                            </div>
+                            <div id="cohortCompareGrid"></div>
+                        </div>
+                    </section>
+
+                    <!-- PAGE 5: SIGNALS -->
+                    <section class="page-section" id="page-signals">
+                        <div class="page-title-row">
+                            <div>
+                                <h2>Labour Market Signals</h2>
+                                <p class="page-subtitle">
+                                    Real-time intelligence drawn from active job
+                                    listings and employer postings on the
+                                    Atlantis Connect platform.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="card signals-intro-card">
+                            <div
+                                style="
+                                    display: flex;
+                                    gap: 1rem;
+                                    align-items: flex-start;
+                                "
+                            >
+                                <i
+                                    data-feather="zap"
+                                    style="
+                                        color: var(--amber);
+                                        flex-shrink: 0;
+                                        margin-top: 2px;
+                                    "
+                                ></i>
+                                <div>
+                                    <strong
+                                        >Live data — updated as employers post
+                                        and close opportunities.</strong
+                                    >
+                                    <p
+                                        style="
+                                            margin: 0.25rem 0 0 0;
+                                            color: var(--text-muted);
+                                        "
+                                    >
+                                        Use this page to validate your existing
+                                        programmes, identify curriculum gaps,
+                                        and prioritise new programme
+                                        development.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Top 20 Skills in Demand</h3>
+                                <select
+                                    class="inline-select"
+                                    id="skillsSort"
+                                    onchange="renderSkillsGrid()"
+                                >
+                                    <option value="demand">
+                                        Current Demand
+                                    </option>
+                                    <option value="growth">
+                                        Fastest Growing
+                                    </option>
+                                    <option value="gap">
+                                        No Matching Programme
+                                    </option>
+                                </select>
+                            </div>
+                            <div id="skillsGrid"></div>
+                        </div>
+
+                        <div class="two-col-grid">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>Industry Demand Breakdown</h3>
+                                </div>
+                                <div id="industryBreakdown"></div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>Trend Alerts</h3>
+                                    <span class="badge badge-amber">5 new</span>
+                                </div>
+                                <div id="trendAlerts"></div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Skills Gap Report</h3>
+                                <button
+                                    class="btn btn-sm btn-outline"
+                                    onclick="
+                                        alert('Generating Skills Gap PDF…')
+                                    "
+                                >
+                                    <i data-feather="download"></i>Download
+                                </button>
+                            </div>
+                            <p
+                                style="
+                                    color: var(--text-muted);
+                                    margin-bottom: 1.25rem;
+                                    font-size: 0.875rem;
+                                "
+                            >
+                                Your programmes mapped against what employers in
+                                the Atlantis SEZ currently need.
+                            </p>
+                            <div id="gapMatrix"></div>
+                        </div>
+                    </section>
+
+                    <!-- PAGE 6: PARTNERSHIPS -->
+                    <section class="page-section" id="page-partnerships">
+                        <div class="page-title-row">
+                            <div>
+                                <h2>Employer Partnerships</h2>
+                                <p class="page-subtitle">
+                                    Manage work-integrated learning placements,
+                                    co-designed programmes, and graduate hiring
+                                    pipelines with SEZ employers.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="summary-strip">
+                            <div class="sstrip-item">
+                                <span class="sstrip-num">24</span
+                                ><span class="sstrip-lbl">Active Partners</span>
+                            </div>
+                            <div class="sstrip-item green-accent">
+                                <span class="sstrip-num">42</span
+                                ><span class="sstrip-lbl">WIL Placements</span>
+                            </div>
+                            <div class="sstrip-item">
+                                <span class="sstrip-num">184</span
+                                ><span class="sstrip-lbl"
+                                    >Graduates Placed (12 mo)</span
+                                >
+                            </div>
+                            <div class="sstrip-item amber-accent">
+                                <span class="sstrip-num">3</span
+                                ><span class="sstrip-lbl"
+                                    >Joint Programmes</span
+                                >
+                            </div>
+                        </div>
+                        <div class="tab-bar">
+                            <button
+                                class="tab-btn active"
+                                data-group="partner"
+                                data-pane="partner-active"
+                            >
+                                Active Partners
+                            </button>
+                            <button
+                                class="tab-btn"
+                                data-group="partner"
+                                data-pane="partner-potential"
+                            >
+                                Potential Partners
+                            </button>
+                            <button
+                                class="tab-btn"
+                                data-group="partner"
+                                data-pane="partner-requests"
+                            >
+                                Requests <span class="tab-badge">2</span>
+                            </button>
+                        </div>
+                        <div class="tab-pane active" id="partner-active">
+                            <div
+                                class="partner-cards-grid"
+                                id="partnerActiveGrid"
+                            ></div>
+                        </div>
+                        <div class="tab-pane" id="partner-potential">
+                            <div
+                                class="partner-cards-grid"
+                                id="partnerPotentialGrid"
+                            ></div>
+                        </div>
+                        <div class="tab-pane" id="partner-requests">
+                            <div id="partnerRequestsList"></div>
+                        </div>
+                    </section>
+
+                    <!-- PAGE 7: NOTIFICATIONS -->
+                    <section class="page-section" id="page-notifications">
+                        <div class="page-title-row">
+                            <div>
+                                <h2>Notifications &amp; Alerts</h2>
+                                <p class="page-subtitle">
+                                    Platform activity, graduate placements,
+                                    at-risk flags, and labour market signals —
+                                    all in one place.
+                                </p>
+                            </div>
+                            <button
+                                class="btn btn-outline"
+                                onclick="markAllRead()"
+                            >
+                                <i data-feather="check-square"></i>Mark All as
+                                Read
+                            </button>
+                        </div>
+                        <div class="notif-layout">
+                            <div class="notif-feed-col" id="notifFeed"></div>
+                            <div class="notif-prefs-col">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3>Alert Preferences</h3>
+                                    </div>
+                                    <p
+                                        style="
+                                            color: var(--text-muted);
+                                            font-size: 0.85rem;
+                                            margin-bottom: 1rem;
+                                        "
+                                    >
+                                        Choose what you're notified about and
+                                        through which channels.
+                                    </p>
+                                    <div style="overflow-x: auto">
+                                        <table class="prefs-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Event</th>
+                                                    <th>Platform</th>
+                                                    <th>Email</th>
+                                                    <th>WhatsApp</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>New Enrolment</td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Graduate Placement</td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked
+                                                        />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Demand Spike Alert</td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Partnership Request</td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked
+                                                        />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>At-Risk Flag</td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked
+                                                        />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Enrolment Milestone</td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        Platform Announcement
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div
+                                        style="
+                                            margin-top: 1.25rem;
+                                            display: flex;
+                                            flex-direction: column;
+                                            gap: 0.75rem;
+                                        "
+                                    >
+                                        <div class="form-field">
+                                            <label>Email Address</label>
+                                            <input
+                                                type="email"
+                                                class="form-input"
+                                                value="andile.cele@wc-tvet.edu.za"
+                                            />
+                                        </div>
+                                        <div class="form-field">
+                                            <label>WhatsApp Number</label>
+                                            <input
+                                                type="tel"
+                                                class="form-input"
+                                                value="+27 83 412 9855"
+                                            />
+                                        </div>
+                                        <div
+                                            style="
+                                                display: flex;
+                                                gap: 0.5rem;
+                                                margin-top: 0.5rem;
+                                            "
+                                        >
+                                            <button
+                                                class="btn btn-outline"
+                                                onclick="sendTestNotif()"
+                                            >
+                                                <i data-feather="send"></i>Send
+                                                Test
+                                            </button>
+                                            <button
+                                                class="btn btn-primary"
+                                                onclick="
+                                                    alert(
+                                                        'Alert preferences saved.',
+                                                    )
+                                                "
+                                            >
+                                                Save Preferences
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            </div>
+        </div>
+
+        <!-- PARTNER DRAWER -->
+        <div
+            class="side-drawer-overlay"
+            id="partnerDrawerOverlay"
+            onclick="closePartnerDrawer()"
+        ></div>
+        <aside class="side-drawer" id="partnerDrawer">
+            <div class="side-drawer-head">
+                <div>
+                    <h3 id="drawerPartnerName">Partnership Details</h3>
+                    <span class="drawer-sub"
+                        >Interaction history &amp; relationship log</span
+                    >
+                </div>
+                <button class="icon-btn" onclick="closePartnerDrawer()">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="side-drawer-body">
+                <div class="log-form-card">
+                    <h4>Log an Interaction</h4>
+                    <div class="form-field" style="margin-top: 0.75rem">
+                        <label>Type</label>
+                        <select class="form-input" id="logType">
+                            <option>In-Person Meeting</option>
+                            <option>Phone Call</option>
+                            <option>Site Visit</option>
+                            <option>Email Exchange</option>
+                            <option>Virtual Meeting</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <label>Notes</label>
+                        <textarea
+                            class="form-input"
+                            id="logNotes"
+                            rows="3"
+                            placeholder="What was discussed? Any follow-up actions?"
+                        ></textarea>
+                    </div>
+                    <button
+                        class="btn btn-primary btn-sm"
+                        style="width: 100%; margin-top: 0.5rem"
+                        onclick="saveInteraction()"
+                    >
+                        <i data-feather="plus"></i>Save Interaction
+                    </button>
+                </div>
+                <h4
+                    style="
+                        font-family: var(--font-head);
+                        font-size: 0.95rem;
+                        margin-bottom: 1rem;
+                    "
+                >
+                    Interaction History
+                </h4>
+                <div
+                    class="interaction-timeline"
+                    id="interactionTimeline"
+                ></div>
+            </div>
+        </aside>
+
+        <!-- PARTICIPANT DRAWER -->
+        <div
+            class="side-drawer-overlay"
+            id="participantDrawerOverlay"
+            onclick="closeParticipantDrawer()"
+        ></div>
+        <aside class="side-drawer side-drawer-wide" id="participantDrawer">
+            <div class="side-drawer-head">
+                <div>
+                    <h3 id="pdName">Participant Profile</h3>
+                    <span class="drawer-sub" id="pdProg">—</span>
+                </div>
+                <button class="icon-btn" onclick="closeParticipantDrawer()">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="side-drawer-body">
+                <div class="pd-stats-row">
+                    <div class="pd-stat">
+                        <span class="pd-num" id="pdProgress">—</span
+                        ><span class="pd-lbl">Progress</span>
+                    </div>
+                    <div class="pd-stat">
+                        <span class="pd-num" id="pdAttend">—</span
+                        ><span class="pd-lbl">Attendance</span>
+                    </div>
+                    <div class="pd-stat">
+                        <span class="pd-num" id="pdPassport">—</span
+                        ><span class="pd-lbl">Impact Passport</span>
+                    </div>
+                </div>
+                <div class="form-field">
+                    <label>Status</label>
+                    <select class="form-input" id="pdStatus">
+                        <option value="on-track">On Track</option>
+                        <option value="at-risk">At Risk</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label>Coordinator Notes</label>
+                    <textarea
+                        class="form-input"
+                        id="pdNotes"
+                        rows="4"
+                        placeholder="Add notes about this participant…"
+                    ></textarea>
+                </div>
+                <div style="display: flex; gap: 0.75rem; margin-top: 1rem">
+                    <button
+                        class="btn btn-outline"
+                        onclick="contactParticipant()"
+                    >
+                        <i data-feather="message-circle"></i>Contact via
+                        WhatsApp
+                    </button>
+                    <button
+                        class="btn btn-primary"
+                        onclick="saveParticipantUpdate()"
+                    >
+                        <i data-feather="save"></i>Save Update
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- PROGRAMME MODAL -->
+        <div class="modal-overlay" id="progModalOverlay">
+            <div class="modal-box">
+                <div class="modal-head">
+                    <h3>Create New Programme</h3>
+                    <button class="icon-btn" onclick="closeProgModal()">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form onsubmit="submitProgramme(event)">
+                        <div class="modal-two-col">
+                            <div class="modal-col">
+                                <div class="form-field">
+                                    <label>Programme Name *</label
+                                    ><input
+                                        type="text"
+                                        class="form-input"
+                                        id="fName"
+                                        required
+                                        placeholder="e.g. Solar PV Installation"
+                                    />
+                                </div>
+                                <div class="form-field">
+                                    <label>Programme Type *</label>
+                                    <select
+                                        class="form-input"
+                                        id="fType"
+                                        required
+                                    >
+                                        <option value="">Select type…</option>
+                                        <option>Vocational Training</option>
+                                        <option>Learnership</option>
+                                        <option>Short Course</option>
+                                        <option>Apprenticeship</option>
+                                        <option>Internship Placement</option>
+                                        <option>Digital Skills</option>
+                                    </select>
+                                </div>
+                                <div class="form-field">
+                                    <label>Credential Awarded</label
+                                    ><input
+                                        type="text"
+                                        class="form-input"
+                                        id="fCred"
+                                        placeholder="e.g. National Certificate in Solar PV"
+                                    />
+                                </div>
+                                <div class="form-field">
+                                    <label>NQF Level</label>
+                                    <select class="form-input">
+                                        <option>Not Applicable</option>
+                                        <option>NQF Level 1</option>
+                                        <option>NQF Level 2</option>
+                                        <option>NQF Level 3</option>
+                                        <option>NQF Level 4</option>
+                                        <option>NQF Level 5</option>
+                                        <option>NQF Level 6</option>
+                                    </select>
+                                </div>
+                                <div class="form-row-2">
+                                    <div class="form-field">
+                                        <label>Start Date</label
+                                        ><input
+                                            type="date"
+                                            class="form-input"
+                                            id="fStart"
+                                            value="2026-07-01"
+                                        />
+                                    </div>
+                                    <div class="form-field">
+                                        <label>End Date</label
+                                        ><input
+                                            type="date"
+                                            class="form-input"
+                                            id="fEnd"
+                                            value="2026-12-15"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="form-field">
+                                    <label>Delivery Format</label>
+                                    <div class="format-toggles">
+                                        <button
+                                            type="button"
+                                            class="format-btn active"
+                                            onclick="toggleFormat(this)"
+                                        >
+                                            In-Person
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="format-btn"
+                                            onclick="toggleFormat(this)"
+                                        >
+                                            Online
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="format-btn"
+                                            onclick="toggleFormat(this)"
+                                        >
+                                            Hybrid
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-field">
+                                    <label>Total Capacity *</label
+                                    ><input
+                                        type="number"
+                                        class="form-input"
+                                        id="fCapacity"
+                                        required
+                                        min="1"
+                                        placeholder="e.g. 30"
+                                    />
+                                </div>
+                                <div class="form-field">
+                                    <label>Cost to Participant</label>
+                                    <div class="format-toggles">
+                                        <button
+                                            type="button"
+                                            class="format-btn active"
+                                            onclick="toggleFormat(this)"
+                                        >
+                                            Free / Subsidised
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="format-btn"
+                                            onclick="toggleFormat(this)"
+                                        >
+                                            Paid
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-field">
+                                    <label>Funding Source</label>
+                                    <select class="form-input">
+                                        <option>Self-funded</option>
+                                        <option>SETA</option>
+                                        <option>DHET</option>
+                                        <option>ASEZCo</option>
+                                        <option>Private Sector Partner</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-col">
+                                <div class="form-field">
+                                    <label
+                                        >Skills Developed
+                                        (comma-separated)</label
+                                    ><input
+                                        type="text"
+                                        class="form-input"
+                                        id="fSkills"
+                                        oninput="updateDemandPanel()"
+                                        value="Solar Wiring, PV Array Alignment, Fault Detection"
+                                    />
+                                </div>
+                                <div class="demand-match-panel">
+                                    <div class="dmp-head">
+                                        <i data-feather="zap"></i
+                                        ><strong
+                                            >Live Employer Demand Match</strong
+                                        >
+                                    </div>
+                                    <div class="dmp-row">
+                                        <span class="dmp-badge" id="dmpBadge"
+                                            >Match Score: 94%</span
+                                        >
+                                        <span class="dmp-text" id="dmpText"
+                                            >High alignment — 4 active SEZ
+                                            employer listings match these
+                                            skills.</span
+                                        >
+                                    </div>
+                                </div>
+                                <div class="form-field">
+                                    <label>Job Types Connected</label
+                                    ><input
+                                        type="text"
+                                        class="form-input"
+                                        id="fRoles"
+                                        placeholder="e.g. Solar Technician, Grid Assistant"
+                                    />
+                                </div>
+                                <div class="form-field">
+                                    <label>Location (if in-person)</label
+                                    ><input
+                                        type="text"
+                                        class="form-input"
+                                        placeholder="e.g. Atlantis TVET Campus, Lab A"
+                                    />
+                                </div>
+                                <div class="form-field">
+                                    <label>Partner Employers</label
+                                    ><input
+                                        type="text"
+                                        class="form-input"
+                                        placeholder="e.g. GigaEnergy Manufacturing"
+                                    />
+                                </div>
+                                <div class="form-field">
+                                    <label>Minimum Entry Requirements</label
+                                    ><textarea
+                                        class="form-input"
+                                        rows="2"
+                                        placeholder="e.g. Grade 12 or equivalent…"
+                                    ></textarea>
+                                </div>
+                                <div class="form-field">
+                                    <label
+                                        >Programme Description
+                                        <span class="char-count" id="descCount"
+                                            >0 / 300 words</span
+                                        ></label
+                                    >
+                                    <textarea
+                                        class="form-input"
+                                        id="fDesc"
+                                        rows="4"
+                                        placeholder="Describe the programme content, practical components, and expected outcomes…"
+                                        oninput="countWords(this)"
+                                    ></textarea>
+                                </div>
+                                <div class="form-field">
+                                    <label
+                                        style="
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 0.5rem;
+                                            cursor: pointer;
+                                        "
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked
+                                            style="accent-color: var(--primary)"
+                                        />
+                                        Participants receive Impact Passport
+                                        credential on completion
+                                    </label>
+                                </div>
+                                <div class="upload-zone">
+                                    <i data-feather="upload-cloud"></i>
+                                    <span>Upload Accreditation Documents</span>
+                                    <label class="upload-link"
+                                        >Select file<input
+                                            type="file"
+                                            style="display: none"
+                                            onchange="
+                                                alert('Document uploaded.')
+                                            "
+                                    /></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-foot">
+                            <button
+                                type="button"
+                                class="btn btn-ghost"
+                                onclick="closeProgModal()"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-outline"
+                                onclick="alert('Saved as draft.')"
+                            >
+                                Save as Draft
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                Publish Programme
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- MOBILE BOTTOM NAV -->
+        <nav class="bottom-nav">
+            <button class="bnav-item active" data-target="page-home">
+                <i data-feather="home"></i><span>Home</span>
+            </button>
+            <button class="bnav-item" data-target="page-programmes">
+                <i data-feather="book"></i><span>Programmes</span>
+            </button>
+            <button class="bnav-item" data-target="page-participants">
+                <i data-feather="users"></i><span>Participants</span>
+            </button>
+            <button class="bnav-item" data-target="page-outcomes">
+                <i data-feather="trending-up"></i><span>Outcomes</span>
+            </button>
+            <button class="bnav-item" data-target="page-notifications">
+                <i data-feather="bell"></i><span>Alerts</span>
+            </button>
+        </nav>
+
+        <script src="dashboard-institution.js"></script>
+    </body>
+</html>

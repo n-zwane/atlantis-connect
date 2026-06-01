@@ -55,6 +55,30 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     updateGreeting();
 
+        // 4. Mobile Sidebar Toggle wiring
+        const mobileToggle = document.getElementById("mobileSidebarToggle");
+        if (mobileToggle) {
+            // ensure the toggle only shows on small screens
+            const checkToggleVisibility = () => {
+                if (window.innerWidth <= 768) {
+                    mobileToggle.classList.remove("hidden");
+                } else {
+                    mobileToggle.classList.add("hidden");
+                }
+            };
+            checkToggleVisibility();
+            window.addEventListener("resize", checkToggleVisibility);
+        }
+
+
+    window.toggleSidebar = () => {
+        const sb = document.getElementById("desktopSidebar");
+        const toggle = document.getElementById("mobileSidebarToggle");
+        if (!sb || !toggle) return;
+        const expanded = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", (!expanded).toString());
+        sb.style.display = expanded ? "none" : "flex";
+    };
     // 4. Animate Number (Local Hire Rate)
     const animateValue = (obj, start, end, duration) => {
         let startTimestamp = null;

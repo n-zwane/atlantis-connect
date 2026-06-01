@@ -17,10 +17,12 @@
         <script src="https://unpkg.com/feather-icons"></script>
 
         <link rel="stylesheet" href="dashboard-employer.css" />
+        <!-- Mobile friendly viewport already set above; add small helper for accessibility -->
     </head>
     <body>
         <div class="app-container">
             <aside class="sidebar" id="desktopSidebar">
+                <button id="mobileSidebarToggle" class="mobile-sidebar-toggle hidden" aria-expanded="false" aria-controls="desktopSidebar" onclick="toggleSidebar()">☰</button>
                 <div class="sidebar-brand">
                     <span class="brand-title">Atlantis Connect</span>
                     <span class="brand-subtitle">Employer Hub</span>

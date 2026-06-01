@@ -32,14 +32,12 @@ body {
     font-family: var(--font-body);
     background-color: var(--color-bg-canvas);
     color: var(--color-text-dark);
-    height: 100vh;
-    overflow: hidden;
 }
 
 /* LAYOUT */
 .app-container {
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 /* SIDEBAR (Desktop) */
@@ -669,12 +667,17 @@ h2 {
     }
     .main-content {
         padding-bottom: 60px;
+        /* allow main content to scroll naturally on mobile */
+        min-height: 0;
+        height: auto;
     }
     .top-bar {
         padding: 0 1rem;
     }
     .scrollable-stage {
         padding: 1rem;
+        max-height: calc(100vh - 140px);
+        overflow-y: auto;
     }
     .home-grid {
         grid-template-columns: 1fr;

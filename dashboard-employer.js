@@ -243,6 +243,53 @@ window.initChart = () => {
             },
         },
     });
+    // Initialize B-BBEE Transformation Spend chart (doughnut) if canvas present
+    const bbCtx = document.getElementById('bbbeeChart');
+    if (bbCtx) {
+        try {
+            window.bbbeeChartInstance = new Chart(bbCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'Black Women-Owned Entities',
+                        'Youth-Owned Entities',
+                        'Other / Small Suppliers',
+                    ],
+                    datasets: [
+                        {
+                            data: [60, 35, 5],
+                            backgroundColor: [
+                                '#0f9f68', // accent
+                                '#0ea5e9', // blue
+                                '#e6efef', // light
+                            ],
+                            hoverOffset: 6,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) {
+                                    const v = ctx.parsed || 0;
+                                    const label = ctx.label || '';
+                                    return `${label}: ${v}%`;
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+        } catch (err) {
+            console.warn('Could not initialize B-BBEE chart', err);
+        }
+    }
+
     isChartInitialized = true;
 };
 

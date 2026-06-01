@@ -3101,6 +3101,13 @@ h2 {
     color: var(--color-accent);
 }
 
+/* bbbee chart wrapper so we can control height per viewport */
+.bbbee-chart-wrapper {
+    height: 180px;
+    width: 100%;
+    position: relative;
+}
+
 /* Skills Specifics */
 .skills-metrics-list {
     display: flex;
@@ -3211,6 +3218,28 @@ h2 {
     }
     .export-actions {
         flex-wrap: wrap;
+    }
+}
+
+/* Desktop layout tweaks: reduce white space under B-BBEE card */
+@media (min-width: 993px) {
+    .analytics-masonry-grid .analytics-card {
+        justify-content: space-between;
+    }
+
+    /* slightly reduce chart height on larger screens and ensure canvas fills wrapper */
+    .bbbee-chart-wrapper {
+        height: 140px;
+    }
+    .bbbee-chart-wrapper canvas {
+        width: 100% !important;
+        height: 100% !important;
+        display: block;
+    }
+
+    /* tighten spacing under micro stats */
+    .smme-stats-grid {
+        gap: 0.75rem;
     }
 }
 

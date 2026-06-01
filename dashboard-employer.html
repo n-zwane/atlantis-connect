@@ -2966,21 +2966,17 @@
                                     />
                                 </div>
                                 <button
+                                    id="supplierFiltersBtn"
                                     class="btn btn-outline mobile-filter-trigger"
-                                    onclick="
-                                        document
-                                            .getElementById(
-                                                'supplierAdvancedFilters',
-                                            )
-                                            .classList.toggle('hidden-mobile')
-                                    "
+                                    aria-expanded="false"
+                                    onclick="toggleSupplierFilters()"
                                 >
                                     <i data-feather="sliders"></i>
                                     <span>Filters</span>
                                 </button>
                             </div>
 
-                            <div class="primary-filter-chips">
+                            <div id="supplierPrimaryFilters" class="primary-filter-chips hidden">
                                 <button class="chip-btn active">
                                     All Suppliers
                                 </button>
@@ -2992,7 +2988,7 @@
                             </div>
 
                             <div
-                                class="secondary-filters-panel hidden-mobile"
+                                class="secondary-filters-panel hidden"
                                 id="supplierAdvancedFilters"
                             >
                                 <div class="secondary-grid">

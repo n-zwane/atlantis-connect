@@ -366,6 +366,21 @@ window.toggleSecondaryFilters = () => {
     }
 };
 
+// 2a. Supplier Directory Filters Toggle
+window.toggleSupplierFilters = () => {
+    const panel = document.getElementById("supplierAdvancedFilters");
+    const chips = document.getElementById("supplierPrimaryFilters");
+    const btn = document.getElementById("supplierFiltersBtn");
+
+    if (panel) panel.classList.toggle("hidden");
+    if (chips) chips.classList.toggle("hidden");
+
+    if (btn) {
+        const expanded = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", (!expanded).toString());
+    }
+};
+
 // 2. Clear out filtering state values resets configuration
 window.resetTalentFilters = (event) => {
     if (event) event.preventDefault();

@@ -354,8 +354,15 @@ window.changePostingStatus = (buttonElement, targetStatusLabel) => {
 // 1. Mobile Filter Slider Toggle Trigger Component
 window.toggleSecondaryFilters = () => {
     const panel = document.getElementById("advancedFiltersPanel");
-    if (panel) {
-        panel.classList.toggle("hidden-mobile");
+    const chips = document.getElementById("talentPrimaryFilters");
+    const btn = document.getElementById("talentFiltersBtn");
+
+    if (panel) panel.classList.toggle("hidden");
+    if (chips) chips.classList.toggle("hidden");
+
+    if (btn) {
+        const expanded = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", (!expanded).toString());
     }
 };
 

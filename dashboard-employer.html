@@ -2628,7 +2628,9 @@
                                     />
                                 </div>
                                 <button
+                                    id="talentFiltersBtn"
                                     class="btn btn-outline mobile-filter-trigger"
+                                    aria-expanded="false"
                                     onclick="toggleSecondaryFilters()"
                                 >
                                     <i data-feather="sliders"></i>
@@ -2636,7 +2638,7 @@
                                 </button>
                             </div>
 
-                            <div class="primary-filter-chips">
+                            <div id="talentPrimaryFilters" class="primary-filter-chips hidden">
                                 <button class="chip-btn active">
                                     All Candidates
                                 </button>
@@ -2653,7 +2655,7 @@
                             </div>
 
                             <div
-                                class="secondary-filters-panel hidden-mobile"
+                                class="secondary-filters-panel hidden"
                                 id="advancedFiltersPanel"
                             >
                                 <div class="secondary-grid">

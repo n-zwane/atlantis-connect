@@ -1289,6 +1289,11 @@ h2 {
     align-items: center;
     gap: 1rem;
     margin-bottom: 1.25rem;
+    justify-content: space-between;
+}
+.candidate-identity {
+    flex: 1;
+    min-width: 0;
 }
 .candidate-avatar-placeholder {
     width: 48px;
@@ -1328,9 +1333,8 @@ h2 {
 
 /* Circular Metrics Ring Element Indicator UI Setup rules */
 .passport-circle-indicator {
-    position: absolute;
-    right: 1.5rem;
-    top: 3.2rem;
+    position: relative;
+    margin-left: auto;
     width: 42px;
     height: 42px;
     border-radius: 50%;
@@ -1352,6 +1356,8 @@ h2 {
     background: white;
     border-radius: 50%;
     z-index: 1;
+    left: 4px;
+    top: 4px;
 }
 .strength-num {
     font-size: 0.7rem;

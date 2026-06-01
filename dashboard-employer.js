@@ -101,6 +101,24 @@ document.addEventListener("DOMContentLoaded", () => {
         const rateObj = document.getElementById("localHireRate");
         if (rateObj) animateValue(rateObj, 0, 78, 1500);
     }, 500);
+
+    // Wire up PDF download button (if present)
+    const pdfBtn = document.getElementById('downloadHiresPdfBtn');
+    if (pdfBtn) {
+        pdfBtn.addEventListener('click', () => {
+            if (typeof window.downloadLocalHiresPDF === 'function') {
+                window.downloadLocalHiresPDF();
+            } else if (typeof window.initChart === 'function') {
+                // ensure chart is initialized then try again
+                window.initChart();
+                setTimeout(() => {
+                    if (typeof window.downloadLocalHiresPDF === 'function') window.downloadLocalHiresPDF();
+                }, 400);
+            } else {
+                alert('Preparing report — please try again shortly.');
+            }
+        });
+    }
 });
 
 // 5. Form Revealer (Post Opportunity Page)
@@ -159,7 +177,8 @@ window.initChart = () => {
     const ctx = document.getElementById("hiresChart");
     if (!ctx) return;
 
-    new Chart(ctx, {
+    // expose the chart instance globally so other routines (PDF export) can access it
+    window.hiresChartInstance = new Chart(ctx, {
         type: "bar",
         data: {
             labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
@@ -191,6 +210,104 @@ window.initChart = () => {
         },
     });
     isChartInitialized = true;
+};
+
+// PDF generation for Local Hires Analytics
+window.downloadLocalHiresPDF = async () => {
+    const jspdfGlobal = window.jspdf || window.jspdf;
+    const jsPDF = jspdfGlobal?.jsPDF || window.jsPDF;
+    if (!jsPDF) {
+        alert('PDF library not loaded.');
+        return;
+    }
+
+    // Ensure chart instance exists
+    if (!window.hiresChartInstance && typeof window.initChart === 'function') {
+        window.initChart();
+    }
+
+    // Prepare data
+    const companyName =
+        document.querySelector('.company-name')?.innerText || document.title || 'Employer Hub';
+    const generatedAt = new Date().toLocaleString();
+
+    const stats = [];
+    document.querySelectorAll('.stats-grid .stat-card').forEach((card) => {
+        const label = card.querySelector('.stat-label')?.innerText || '';
+        const value = card.querySelector('.stat-value')?.innerText || '';
+        if (label || value) stats.push({ label: label.trim(), value: value.trim() });
+    });
+
+    // Get chart image (prefer Chart.js exported image)
+    let chartImg;
+    try {
+        if (window.hiresChartInstance && typeof window.hiresChartInstance.toBase64Image === 'function') {
+            chartImg = window.hiresChartInstance.toBase64Image();
+        }
+    } catch (e) {
+        // ignore and fallback
+    }
+    if (!chartImg) {
+        const canvas = document.getElementById('hiresChart');
+        if (canvas && canvas.toDataURL) chartImg = canvas.toDataURL('image/png');
+    }
+
+    const doc = new jsPDF({ unit: 'pt', format: 'a4', orientation: 'portrait' });
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 40;
+    let y = 40;
+
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`${companyName} — Local Hire Analytics`, margin, y);
+    y += 18;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Generated: ${generatedAt}`, margin, y);
+    y += 18;
+
+    const addStatsList = () => {
+        doc.setFontSize(12);
+        stats.forEach((s) => {
+            if (y > doc.internal.pageSize.getHeight() - margin - 30) {
+                doc.addPage();
+                y = margin;
+            }
+            doc.text(`${s.label}: ${s.value}`, margin, y);
+            y += 16;
+        });
+    };
+
+    if (chartImg) {
+        const img = new Image();
+        img.onload = () => {
+            const imgW = img.width;
+            const imgH = img.height;
+            const pdfW = pageWidth - margin * 2;
+            const pdfH = (imgH * pdfW) / imgW;
+            if (y + pdfH > doc.internal.pageSize.getHeight() - margin) {
+                doc.addPage();
+                y = margin;
+            }
+            doc.addImage(img, 'PNG', margin, y, pdfW, pdfH);
+            y += pdfH + 16;
+            addStatsList();
+            const fname = `local-hires-analytics-${new Date().toISOString().slice(0,10)}.pdf`;
+            doc.save(fname);
+        };
+        img.onerror = () => {
+            doc.text('Chart could not be rendered.', margin, y);
+            y += 16;
+            addStatsList();
+            doc.save(`local-hires-analytics-${new Date().toISOString().slice(0,10)}.pdf`);
+        };
+        img.src = chartImg;
+    } else {
+        doc.text('Chart unavailable.', margin, y);
+        y += 16;
+        addStatsList();
+        doc.save(`local-hires-analytics-${new Date().toISOString().slice(0,10)}.pdf`);
+    }
 };
 // --- OPPORTUNITY TRACKING MANAGEMENT FUNCTIONS ---
 

@@ -792,3 +792,107 @@ window.sendTestAlert = () => {
             "3. WhatsApp Gateway (+27 82 555 0192)",
     );
 };
+
+// --- Active Postings: Applicants & Bids Preview Modals ---
+window.openApplicantsPreview = (btn) => {
+    const card = btn.closest('.posting-row-card');
+    if (!card) return;
+    const title = card.querySelector('.posting-title-row h4')?.innerText?.trim() || 'Applicants';
+    const details = card.querySelector('.posting-details')?.innerText?.trim() || '';
+
+    const metrics = {};
+    card.querySelectorAll('.posting-metrics .metric-box').forEach((m) => {
+        const num = m.querySelector('.metric-num')?.innerText?.trim() || '';
+        const lbl = m.querySelector('.metric-lbl')?.innerText?.trim() || '';
+        if (lbl) metrics[lbl] = num;
+    });
+
+    const applicantsNum = parseInt(metrics['Applicants'] || metrics['Applicants'] || 0, 10) || 0;
+    const sampleCount = Math.min(applicantsNum || 3, 6);
+    const sampleNames = ['Sipho M.', 'Thandi N.', 'Aisha K.', 'John S.', 'Zanele Q.', 'Lwazi P.'];
+
+    const bodyEl = document.getElementById('applicantsModalBody');
+    bodyEl.innerHTML = '';
+
+    const headerHtml = `<div style="margin-bottom:8px"><strong>${title}</strong><div style="color:var(--color-text-muted);font-size:0.9rem">${details}</div></div>`;
+    bodyEl.insertAdjacentHTML('beforeend', headerHtml);
+
+    const statsHtml = '<div style="display:flex;gap:1rem;margin-bottom:10px;flex-wrap:wrap">' +
+        Object.keys(metrics).map(k => `<div class="preview-badge">${k}: <strong style="margin-left:6px">${metrics[k]}</strong></div>`).join('') +
+        '</div>';
+    bodyEl.insertAdjacentHTML('beforeend', statsHtml);
+
+    const listContainer = document.createElement('div');
+    for (let i = 0; i < sampleCount; i++) {
+        const name = sampleNames[i % sampleNames.length];
+        const days = Math.floor(Math.random() * 10) + 1;
+        const score = Math.floor(50 + Math.random() * 50);
+        const row = document.createElement('div');
+        row.className = 'preview-row';
+        row.innerHTML = `<div class="meta"><strong>${name}</strong><div style="color:var(--color-text-muted);font-size:0.85rem">Applied ${days} days ago — ${score}% match</div></div><div style="display:flex;gap:0.5rem"><button class="btn btn-outline btn-sm" onclick="openPassportDrawer('${name}', ${score})">View Profile</button><button class="btn btn-primary btn-sm" onclick="openShortlistWorkflow('${name}')">Shortlist</button></div>`;
+        listContainer.appendChild(row);
+    }
+    bodyEl.appendChild(listContainer);
+
+    bodyEl.insertAdjacentHTML('beforeend', `<div style="margin-top:12px;display:flex;justify-content:flex-end"><button class="btn btn-outline" onclick="openApplicationPipeline('${title.replace(/'/g, "\\'")}')">Open Full Pipeline</button></div>`);
+
+    document.getElementById('applicantsModalOverlay').classList.remove('hidden');
+    document.getElementById('applicantsModal').classList.remove('hidden');
+    if (window.feather) window.feather.replace();
+};
+
+window.closeApplicantsPreview = () => {
+    document.getElementById('applicantsModalOverlay').classList.add('hidden');
+    document.getElementById('applicantsModal').classList.add('hidden');
+};
+
+window.openBidsPreview = (btn) => {
+    const card = btn.closest('.posting-row-card');
+    if (!card) return;
+    const title = card.querySelector('.posting-title-row h4')?.innerText?.trim() || 'Bids';
+    const details = card.querySelector('.posting-details')?.innerText?.trim() || '';
+
+    const metrics = {};
+    card.querySelectorAll('.posting-metrics .metric-box').forEach((m) => {
+        const num = m.querySelector('.metric-num')?.innerText?.trim() || '';
+        const lbl = m.querySelector('.metric-lbl')?.innerText?.trim() || '';
+        if (lbl) metrics[lbl] = num;
+    });
+
+    const bidsNum = parseInt(metrics['Bids Recieved'] || metrics['Bids Received'] || 0, 10) || parseInt(metrics['Bids'] || 0, 10) || 0;
+    const sampleCount = Math.min(bidsNum || 3, 6);
+    const bidderNames = ['Ocean Supplies', 'GreenGate Contractors', 'SteelWorks Pty', 'WestCoast Trading', 'Atlas Fabrications', 'Harbor Builders'];
+
+    const bodyEl = document.getElementById('bidsModalBody');
+    bodyEl.innerHTML = '';
+
+    const headerHtml = `<div style="margin-bottom:8px"><strong>${title}</strong><div style="color:var(--color-text-muted);font-size:0.9rem">${details}</div></div>`;
+    bodyEl.insertAdjacentHTML('beforeend', headerHtml);
+
+    const statsHtml = '<div style="display:flex;gap:1rem;margin-bottom:10px;flex-wrap:wrap">' +
+        Object.keys(metrics).map(k => `<div class="preview-badge">${k}: <strong style="margin-left:6px">${metrics[k]}</strong></div>`).join('') +
+        '</div>';
+    bodyEl.insertAdjacentHTML('beforeend', statsHtml);
+
+    const listContainer = document.createElement('div');
+    for (let i = 0; i < sampleCount; i++) {
+        const name = bidderNames[i % bidderNames.length];
+        const amount = (Math.floor(50 + Math.random() * 450) * 100).toLocaleString();
+        const row = document.createElement('div');
+        row.className = 'preview-row';
+        row.innerHTML = `<div class="meta"><strong>${name}</strong><div style="color:var(--color-text-muted);font-size:0.85rem">Proposed: R${amount} — Submitted ${Math.floor(Math.random()*10)+1} days ago</div></div><div style="display:flex;flex-direction:column;gap:6px"><button class="btn btn-outline btn-sm" onclick="openSupplierDrawer('${name}', ${Math.floor(60+Math.random()*40)})">View Supplier</button><button class="btn btn-primary btn-sm" onclick="alert('Contacting ${name}...')">Contact Bidder</button></div>`;
+        listContainer.appendChild(row);
+    }
+    bodyEl.appendChild(listContainer);
+
+    bodyEl.insertAdjacentHTML('beforeend', `<div style="margin-top:12px;display:flex;justify-content:flex-end"><button class="btn btn-outline" onclick="alert('Open full procurement workspace')">Open Full Bids Workspace</button></div>`);
+
+    document.getElementById('bidsModalOverlay').classList.remove('hidden');
+    document.getElementById('bidsModal').classList.remove('hidden');
+    if (window.feather) window.feather.replace();
+};
+
+window.closeBidsPreview = () => {
+    document.getElementById('bidsModalOverlay').classList.add('hidden');
+    document.getElementById('bidsModal').classList.add('hidden');
+};

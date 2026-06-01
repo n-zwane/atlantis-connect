@@ -930,11 +930,12 @@
                                             </div>
                                         </div>
                                         <div class="posting-actions">
-                                            <button
-                                                class="btn btn-primary btn-sm"
-                                            >
-                                                View Applicants
-                                            </button>
+                                                <button
+                                                    class="btn btn-primary btn-sm"
+                                                    onclick="openApplicantsPreview(this)"
+                                                >
+                                                    View Applicants
+                                                </button>
                                             <button
                                                 class="btn btn-outline btn-icon-sm"
                                                 title="Edit Listing"
@@ -1013,6 +1014,7 @@
                                         <div class="posting-actions">
                                             <button
                                                 class="btn btn-primary btn-sm"
+                                                onclick="openBidsPreview(this)"
                                             >
                                                 Review Bids
                                             </button>
@@ -1089,6 +1091,7 @@
                                         <div class="posting-actions">
                                             <button
                                                 class="btn btn-primary btn-sm"
+                                                onclick="openApplicantsPreview(this)"
                                             >
                                                 View Applicants
                                             </button>
@@ -4651,6 +4654,29 @@
                         </button>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Preview modals for Active Postings -->
+        <div class="modal-overlay hidden" id="applicantsModalOverlay" onclick="closeApplicantsPreview()"></div>
+        <div class="preview-modal hidden" id="applicantsModal" role="dialog" aria-modal="true" aria-labelledby="applicantsModalTitle">
+            <div class="preview-modal-header">
+                <h3 id="applicantsModalTitle">Applicants Preview</h3>
+                <button class="btn btn-text" onclick="closeApplicantsPreview()">Close</button>
+            </div>
+            <div class="preview-modal-body" id="applicantsModalBody">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="bidsModalOverlay" onclick="closeBidsPreview()"></div>
+        <div class="preview-modal hidden" id="bidsModal" role="dialog" aria-modal="true" aria-labelledby="bidsModalTitle">
+            <div class="preview-modal-header">
+                <h3 id="bidsModalTitle">Bids Preview</h3>
+                <button class="btn btn-text" onclick="closeBidsPreview()">Close</button>
+            </div>
+            <div class="preview-modal-body" id="bidsModalBody">
+                <!-- Populated dynamically -->
             </div>
         </div>
 

@@ -1163,11 +1163,13 @@
                                         <div class="posting-actions">
                                             <button
                                                 class="btn btn-outline btn-sm"
+                                                onclick="openArchiveView(this)"
                                             >
-                                                View Archive Archive
+                                                View Archive
                                             </button>
                                             <button
                                                 class="btn btn-accent btn-sm"
+                                                onclick="relistPosting(this)"
                                             >
                                                 <i
                                                     data-feather="refresh-cw"
@@ -1227,11 +1229,13 @@
                                         <div class="posting-actions">
                                             <button
                                                 class="btn btn-outline btn-sm"
+                                                onclick="openVettedView(this)"
                                             >
                                                 View Vetted Bids
                                             </button>
                                             <button
                                                 class="btn btn-accent btn-sm"
+                                                onclick="relistPosting(this)"
                                             >
                                                 <i
                                                     data-feather="refresh-cw"
@@ -4676,6 +4680,28 @@
                 <button class="btn btn-text" onclick="closeBidsPreview()">Close</button>
             </div>
             <div class="preview-modal-body" id="bidsModalBody">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="archiveModalOverlay" onclick="closeArchiveView()"></div>
+        <div class="preview-modal hidden" id="archiveModal" role="dialog" aria-modal="true" aria-labelledby="archiveModalTitle">
+            <div class="preview-modal-header">
+                <h3 id="archiveModalTitle">Archive Details</h3>
+                <button class="btn btn-text" onclick="closeArchiveView()">Close</button>
+            </div>
+            <div class="preview-modal-body" id="archiveModalBody">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="vettedModalOverlay" onclick="closeVettedView()"></div>
+        <div class="preview-modal hidden" id="vettedModal" role="dialog" aria-modal="true" aria-labelledby="vettedModalTitle">
+            <div class="preview-modal-header">
+                <h3 id="vettedModalTitle">Vetted Suppliers</h3>
+                <button class="btn btn-text" onclick="closeVettedView()">Close</button>
+            </div>
+            <div class="preview-modal-body" id="vettedModalBody">
                 <!-- Populated dynamically -->
             </div>
         </div>

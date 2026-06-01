@@ -896,3 +896,153 @@ window.closeBidsPreview = () => {
     document.getElementById('bidsModalOverlay').classList.add('hidden');
     document.getElementById('bidsModal').classList.add('hidden');
 };
+
+// --- Past & Closed: Archive / Vetted previews and Relist action ---
+window.openArchiveView = (btn) => {
+    const card = btn.closest('.posting-row-card');
+    if (!card) return;
+    const title = card.querySelector('.posting-title-row h4')?.innerText?.trim() || 'Archive Item';
+    const details = card.querySelector('.posting-details')?.innerText?.trim() || '';
+
+    const metrics = {};
+    card.querySelectorAll('.posting-metrics .metric-box').forEach((m) => {
+        const num = m.querySelector('.metric-num')?.innerText?.trim() || '';
+        const lbl = m.querySelector('.metric-lbl')?.innerText?.trim() || '';
+        if (lbl) metrics[lbl] = num;
+    });
+
+    let bodyEl = document.getElementById('archiveModalBody');
+    if (!bodyEl) return;
+    bodyEl.innerHTML = '';
+
+    bodyEl.insertAdjacentHTML('beforeend', `<div style="margin-bottom:8px"><strong>${title}</strong><div style="color:var(--color-text-muted);font-size:0.9rem">${details}</div></div>`);
+    bodyEl.insertAdjacentHTML('beforeend', '<div style="display:flex;gap:1rem;margin-bottom:10px;flex-wrap:wrap">' +
+        Object.keys(metrics).map(k => `<div class="preview-badge">${k}: <strong style="margin-left:6px">${metrics[k]}</strong></div>`).join('') +
+        '</div>');
+
+    // store a temporary reference to the card so modal buttons can act on it
+    window.__archiveRelistTarget = card;
+    bodyEl.insertAdjacentHTML('beforeend', `<div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center"><button class="btn btn-accent" onclick="relistPosting(window.__archiveRelistTarget)">Relist</button><button class="btn btn-outline" onclick="closeArchiveView()">Close</button></div>`);
+
+    document.getElementById('archiveModalOverlay').classList.remove('hidden');
+    document.getElementById('archiveModal').classList.remove('hidden');
+    if (window.feather) window.feather.replace();
+};
+
+window.closeArchiveView = () => {
+    document.getElementById('archiveModalOverlay').classList.add('hidden');
+    document.getElementById('archiveModal').classList.add('hidden');
+};
+
+window.openVettedView = (btn) => {
+    const card = btn.closest('.posting-row-card');
+    if (!card) return;
+    const title = card.querySelector('.posting-title-row h4')?.innerText?.trim() || 'Vetted Suppliers';
+    const details = card.querySelector('.posting-details')?.innerText?.trim() || '';
+
+    const metrics = {};
+    card.querySelectorAll('.posting-metrics .metric-box').forEach((m) => {
+        const num = m.querySelector('.metric-num')?.innerText?.trim() || '';
+        const lbl = m.querySelector('.metric-lbl')?.innerText?.trim() || '';
+        if (lbl) metrics[lbl] = num;
+    });
+
+    let bodyEl = document.getElementById('vettedModalBody');
+    if (!bodyEl) return;
+    bodyEl.innerHTML = '';
+
+    bodyEl.insertAdjacentHTML('beforeend', `<div style="margin-bottom:8px"><strong>${title}</strong><div style="color:var(--color-text-muted);font-size:0.9rem">${details}</div></div>`);
+    bodyEl.insertAdjacentHTML('beforeend', '<div style="display:flex;gap:1rem;margin-bottom:10px;flex-wrap:wrap">' +
+        Object.keys(metrics).map(k => `<div class="preview-badge">${k}: <strong style="margin-left:6px">${metrics[k]}</strong></div>`).join('') +
+        '</div>');
+
+    // Sample vetted suppliers list
+    const vetted = ['West Coast Supplies', 'Harbor Warehouse', 'Local Steelworks'];
+    const listContainer = document.createElement('div');
+    vetted.forEach((v) => {
+        const row = document.createElement('div');
+        row.className = 'preview-row';
+        row.innerHTML = `<div class="meta"><strong>${v}</strong><div style="color:var(--color-text-muted);font-size:0.85rem">Vetted supplier — Verified credentials</div></div><div><button class="btn btn-outline btn-sm" onclick="openSupplierDrawer('${v}', 85)">Profile</button></div>`;
+        listContainer.appendChild(row);
+    });
+    bodyEl.appendChild(listContainer);
+
+    bodyEl.insertAdjacentHTML('beforeend', `<div style="margin-top:12px;display:flex;justify-content:flex-end"><button class="btn btn-outline" onclick="closeVettedView()">Close</button></div>`);
+
+    document.getElementById('vettedModalOverlay').classList.remove('hidden');
+    document.getElementById('vettedModal').classList.remove('hidden');
+    if (window.feather) window.feather.replace();
+};
+
+window.closeVettedView = () => {
+    document.getElementById('vettedModalOverlay').classList.add('hidden');
+    document.getElementById('vettedModal').classList.add('hidden');
+};
+
+window.relistPosting = (btnOrCard) => {
+    // Accept either the button element or the card element
+    let card = null;
+    if (!btnOrCard) return;
+    if (btnOrCard.classList && btnOrCard.classList.contains && btnOrCard.classList.contains('posting-row-card')) {
+        card = btnOrCard;
+    } else {
+        card = btnOrCard.closest ? btnOrCard.closest('.posting-row-card') : null;
+    }
+    if (!card) return;
+
+    if (!confirm('Relist this posting? Views and applicants will be reset to 0.')) return;
+
+    // Reset metric numbers
+    card.querySelectorAll('.metric-num').forEach((el) => (el.innerText = '0'));
+
+    // Update status badge to 'Active'
+    const statusBadge = card.querySelector('.posting-title-row .badge');
+    if (statusBadge) {
+        statusBadge.className = 'badge badge-success';
+        statusBadge.innerText = 'Active';
+    } else {
+        const titleRow = card.querySelector('.posting-title-row');
+        if (titleRow) {
+            const span = document.createElement('span');
+            span.className = 'badge badge-success';
+            span.innerText = 'Active';
+            titleRow.appendChild(span);
+        }
+    }
+
+    // Remove archived marker class
+    card.classList.remove('archived-card');
+
+    // Replace posting-actions with active-posting controls
+    const actions = card.querySelector('.posting-actions');
+    if (actions) {
+        actions.innerHTML = `
+            <button class="btn btn-primary btn-sm" onclick="openApplicantsPreview(this)">View Applicants</button>
+            <button class="btn btn-outline btn-icon-sm" title="Edit Listing"><i data-feather="edit-2"></i></button>
+            <button class="btn btn-outline-danger btn-icon-sm" title="Close Listing" onclick="changePostingStatus(this, 'Closed')"><i data-feather="x-circle"></i></button>
+        `;
+    }
+
+    // Move to Active Postings list
+    const activeList = document.querySelector('#active-postings .postings-list');
+    if (activeList) activeList.prepend(card);
+
+    // Update tab counts if present
+    const tabs = document.querySelector('.management-tabs');
+    if (tabs) {
+        const tabBtns = tabs.querySelectorAll('.tab-btn');
+        const activeBtn = tabBtns[0];
+        const pastBtn = tabBtns[1];
+        if (activeBtn) {
+            const c = activeBtn.querySelector('.tab-count');
+            if (c) c.innerText = String((parseInt(c.innerText || '0', 10) || 0) + 1);
+        }
+        if (pastBtn) {
+            const p = pastBtn.querySelector('.tab-count');
+            if (p) p.innerText = String(Math.max(0, (parseInt(p.innerText || '0', 10) || 0) - 1));
+        }
+    }
+
+    if (window.feather) window.feather.replace();
+    alert('Posting relisted and moved to Active Postings.');
+};

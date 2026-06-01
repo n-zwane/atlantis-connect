@@ -39,12 +39,22 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.addEventListener("click", (e) => {
             const targetId = e.currentTarget.getAttribute("data-target");
             switchPage(targetId);
+            // Close mobile 'More' menu if open
+            const mobileMenu = document.getElementById('mobileMoreMenu');
+            const mobileOverlay = document.getElementById('mobileMoreOverlay');
+            const mobileMoreBtn = document.getElementById('mobileMoreBtn');
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                if (mobileOverlay) mobileOverlay.classList.add('hidden');
+                if (mobileMoreBtn) mobileMoreBtn.setAttribute('aria-expanded', 'false');
+            }
         });
     });
 
-    // 3. Time-Based Greeting
+    // 3. Time-Based Greeting (only set if element exists)
     const updateGreeting = () => {
         const greetingEl = document.getElementById("timeGreeting");
+        if (!greetingEl) return; // greeting removed intentionally
         const hour = new Date().getHours();
         let greeting = "Good evening";
 
@@ -70,6 +80,17 @@ document.addEventListener("DOMContentLoaded", () => {
             window.addEventListener("resize", checkToggleVisibility);
         }
 
+        // Show/hide the top-left mobile nav toggle on small screens
+        const mobileMoreToggle = document.getElementById('mobileMoreBtn');
+        if (mobileMoreToggle) {
+            const checkMoreToggle = () => {
+                if (window.innerWidth <= 768) mobileMoreToggle.classList.remove('hidden');
+                else mobileMoreToggle.classList.add('hidden');
+            };
+            checkMoreToggle();
+            window.addEventListener('resize', checkMoreToggle);
+        }
+
 
     window.toggleSidebar = () => {
         const sb = document.getElementById("desktopSidebar");
@@ -79,6 +100,19 @@ document.addEventListener("DOMContentLoaded", () => {
         toggle.setAttribute("aria-expanded", (!expanded).toString());
         sb.style.display = expanded ? "none" : "flex";
     };
+
+// Mobile More menu toggle
+window.toggleMobileMoreMenu = () => {
+    const menu = document.getElementById('mobileMoreMenu');
+    const overlay = document.getElementById('mobileMoreOverlay');
+    const btn = document.getElementById('mobileMoreBtn');
+    if (menu) menu.classList.toggle('hidden');
+    if (overlay) overlay.classList.toggle('hidden');
+    if (btn) {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', (!expanded).toString());
+    }
+};
     // 4. Animate Number (Local Hire Rate)
     const animateValue = (obj, start, end, duration) => {
         let startTimestamp = null;

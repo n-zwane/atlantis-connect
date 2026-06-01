@@ -98,9 +98,9 @@
             <main class="main-content">
                 <header class="top-bar">
                     <div class="top-bar-left">
-                        <span class="time-greeting" id="timeGreeting"
-                            >Good morning, Pieter</span
-                        >
+                        <button id="mobileMoreBtn" class="mobile-nav-toggle hidden" aria-expanded="false" onclick="toggleMobileMoreMenu()">
+                            <i data-feather="menu"></i>
+                        </button>
                     </div>
                     <div class="top-bar-right">
                         <div class="user-profile">
@@ -233,6 +233,7 @@
                             </div>
                         </div>
                     </section>
+                    
 
                     <section class="page-section" id="dashboard-post">
                         <div class="page-header">
@@ -4143,13 +4144,56 @@
             <button class="mob-nav-item" data-target="dashboard-talent">
                 <i data-feather="users"></i>
             </button>
+            <button class="mob-nav-item more-trigger" aria-expanded="false" onclick="toggleMobileMoreMenu()">
+                <i data-feather="more-horizontal"></i>
+            </button>
+        </nav>
+
+        <div id="mobileMoreOverlay" class="mobile-more-overlay hidden" onclick="toggleMobileMoreMenu()"></div>
+        <div id="mobileMoreMenu" class="mobile-more-menu hidden" aria-hidden="true">
+            <button class="mob-nav-item" data-target="dashboard-home">
+                <i data-feather="home"></i>
+                <span>Home</span>
+            </button>
+            <button class="mob-nav-item" data-target="dashboard-post">
+                <i data-feather="plus-circle"></i>
+                <span>Post Opportunity</span>
+            </button>
+            <button class="mob-nav-item" data-target="dashboard-talent">
+                <i data-feather="users"></i>
+                <span>Talent Pool</span>
+            </button>
+            <hr style="border:none;border-top:1px solid var(--color-border);margin:6px 0;" />
             <button class="mob-nav-item" data-target="dashboard-applications">
                 <i data-feather="trello"></i>
+                <span>Active Listings</span>
+            </button>
+            <button class="mob-nav-item" data-target="dashboard-suppliers">
+                <i data-feather="briefcase"></i>
+                <span>Supplier Directory</span>
+            </button>
+            <button class="mob-nav-item" data-target="dashboard-feedback">
+                <i data-feather="star"></i>
+                <span>Feedback & Ratings</span>
+            </button>
+            <button class="mob-nav-item" data-target="dashboard-impact">
+                <i data-feather="bar-chart-2"></i>
+                <span>Impact Dashboard</span>
             </button>
             <button class="mob-nav-item" data-target="dashboard-notifications">
                 <i data-feather="bell"></i>
+                <span>Notifications</span>
             </button>
-        </nav>
+            <hr style="border:none;border-top:1px solid var(--color-border);margin:6px 0;" />
+            <button class="mob-nav-item" onclick="alert('Help & Support — open help center')">
+                <i data-feather="help-circle"></i>
+                <span>Help & Support</span>
+            </button>
+            <button class="mob-nav-item" onclick="location.href='portal.html'">
+                <i data-feather="log-out"></i>
+                <span>Sign Out</span>
+            </button>
+        </div>
 
         <div
             class="drawer-overlay hidden"

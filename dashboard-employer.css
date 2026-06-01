@@ -662,9 +662,75 @@ h2 {
     .sidebar {
         display: none;
     }
+    /* hide bottom nav on mobile since we'll use the top-left dropdown */
     .mobile-bottom-nav {
-        display: flex;
+        display: none !important;
     }
+    .mobile-nav-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        color: var(--color-text-muted);
+        font-size: 1.05rem;
+        padding: 0.35rem 0.5rem;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    .mobile-bottom-nav .mob-nav-item {
+        flex: 0 0 56px;
+        min-width: 56px;
+    }
+
+/* Mobile 'More' overlay and sheet */
+.mobile-more-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 1200;
+}
+.mobile-more-menu {
+    position: absolute;
+    top: 56px;
+    left: 8px;
+    width: 260px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    padding: 0.4rem;
+    z-index: 1250;
+    display: block;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+.mobile-more-menu .mob-nav-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 0.6rem 0.5rem;
+    border-radius: 6px;
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    width: 100%;
+}
+.mobile-more-menu .mob-nav-item i,
+.mobile-more-menu .mob-nav-item svg {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+}
+.mobile-more-menu .mob-nav-item span {
+    font-size: 0.95rem;
+    margin-left: 6px;
+    flex: 1 1 auto;
+}
+.mobile-more-menu .mob-nav-item:hover {
+    background: #fbfbfb;
+    color: var(--color-primary);
+    cursor: pointer;
+}
     .main-content {
         padding-bottom: 60px;
         /* allow main content to scroll naturally on mobile */

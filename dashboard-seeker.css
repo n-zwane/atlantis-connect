@@ -1183,9 +1183,17 @@ body {
         max-width: 100%;
     }
 
-    /* Stats grid: 2 columns is comfortable on mobile */
+    /* Stats grid: brute-force vertical stack on mobile */
     .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        overflow-x: hidden !important;
+    }
+    .stats-grid .stat-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     /* Opportunities grid already collapses at 1024px; keep it single-column */
@@ -1212,6 +1220,14 @@ body {
     .modal-box-panel {
         max-width: 100%;
         box-sizing: border-box;
+    }
+
+    /* Settings toggle rows: constrain width and add right padding so
+       the checkbox never bleeds off the right edge of the screen */
+    #dashboard-settings [style*="justify-content: space-between"] {
+        max-width: 100%;
+        box-sizing: border-box;
+        padding-right: 0.75rem;
     }
 }
 

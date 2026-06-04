@@ -562,12 +562,18 @@ body {
     border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
-    flex-grow: 1;
+    width: fit-content;
     text-align: center;
     transition: var(--transition-smooth);
 }
 .btn-primary-apply:hover {
     background: var(--color-accent-hover);
+}
+
+/* Apply button fills the remaining space only inside listing action rows */
+.listing-actions .btn-primary-apply {
+    flex-grow: 1;
+    width: auto;
 }
 
 /* PAGE 3 UI COMPONENTS: APPLICATION TRACKING BOARD */
@@ -852,6 +858,22 @@ body {
     border-radius: 6px;
     font-weight: 600;
     cursor: pointer;
+}
+
+/* ACTIVE TRAINING PROGRESS BAR */
+.training-progress-track {
+    width: 100%;
+    background: #e4ecee;
+    height: 12px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.training-progress-fill {
+    height: 100%;
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-primary) 100%);
+    box-shadow: 0 2px 8px rgba(15, 159, 104, 0.35);
+    transition: width 0.6s ease;
 }
 
 /* PAGE 6 UI: NOTIFICATIONS PIPELINE */

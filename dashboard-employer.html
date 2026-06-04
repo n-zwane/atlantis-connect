@@ -17,10 +17,12 @@
         <script src="https://unpkg.com/feather-icons"></script>
 
         <link rel="stylesheet" href="dashboard-employer.css" />
+        <!-- Mobile friendly viewport already set above; add small helper for accessibility -->
     </head>
     <body>
         <div class="app-container">
             <aside class="sidebar" id="desktopSidebar">
+                <button id="mobileSidebarToggle" class="mobile-sidebar-toggle hidden" aria-expanded="false" aria-controls="desktopSidebar" onclick="toggleSidebar()">☰</button>
                 <div class="sidebar-brand">
                     <span class="brand-title">Atlantis Connect</span>
                     <span class="brand-subtitle">Employer Hub</span>
@@ -96,9 +98,9 @@
             <main class="main-content">
                 <header class="top-bar">
                     <div class="top-bar-left">
-                        <span class="time-greeting" id="timeGreeting"
-                            >Good morning, Pieter</span
-                        >
+                        <button id="mobileMoreBtn" class="mobile-nav-toggle hidden" aria-expanded="false" onclick="toggleMobileMoreMenu()">
+                            <i data-feather="menu"></i>
+                        </button>
                     </div>
                     <div class="top-bar-right">
                         <div class="user-profile">
@@ -231,6 +233,7 @@
                             </div>
                         </div>
                     </section>
+                    
 
                     <section class="page-section" id="dashboard-post">
                         <div class="page-header">
@@ -928,11 +931,12 @@
                                             </div>
                                         </div>
                                         <div class="posting-actions">
-                                            <button
-                                                class="btn btn-primary btn-sm"
-                                            >
-                                                View Applicants
-                                            </button>
+                                                <button
+                                                    class="btn btn-primary btn-sm"
+                                                    onclick="openApplicantsPreview(this)"
+                                                >
+                                                    View Applicants
+                                                </button>
                                             <button
                                                 class="btn btn-outline btn-icon-sm"
                                                 title="Edit Listing"
@@ -1011,6 +1015,7 @@
                                         <div class="posting-actions">
                                             <button
                                                 class="btn btn-primary btn-sm"
+                                                onclick="openBidsPreview(this)"
                                             >
                                                 Review Bids
                                             </button>
@@ -1087,6 +1092,7 @@
                                         <div class="posting-actions">
                                             <button
                                                 class="btn btn-primary btn-sm"
+                                                onclick="openApplicantsPreview(this)"
                                             >
                                                 View Applicants
                                             </button>
@@ -1158,11 +1164,13 @@
                                         <div class="posting-actions">
                                             <button
                                                 class="btn btn-outline btn-sm"
+                                                onclick="openArchiveView(this)"
                                             >
-                                                View Archive Archive
+                                                View Archive
                                             </button>
                                             <button
                                                 class="btn btn-accent btn-sm"
+                                                onclick="relistPosting(this)"
                                             >
                                                 <i
                                                     data-feather="refresh-cw"
@@ -1222,11 +1230,13 @@
                                         <div class="posting-actions">
                                             <button
                                                 class="btn btn-outline btn-sm"
+                                                onclick="openVettedView(this)"
                                             >
                                                 View Vetted Bids
                                             </button>
                                             <button
                                                 class="btn btn-accent btn-sm"
+                                                onclick="relistPosting(this)"
                                             >
                                                 <i
                                                     data-feather="refresh-cw"
@@ -2263,7 +2273,7 @@
                                         <i data-feather="users"></i> Local Hire
                                         Analytics
                                     </h3>
-                                    <button class="btn btn-outline btn-sm">
+                                    <button id="downloadHiresPdfBtn" class="btn btn-outline btn-sm">
                                         <i data-feather="download"></i> PDF
                                         Report
                                     </button>
@@ -2410,13 +2420,7 @@
                                 >
                                     B-BBEE Transformation Spend
                                 </h4>
-                                <div
-                                    style="
-                                        height: 180px;
-                                        width: 100%;
-                                        position: relative;
-                                    "
-                                >
+                                <div class="bbbee-chart-wrapper">
                                     <canvas id="bbbeeChart"></canvas>
                                 </div>
 
@@ -2447,6 +2451,35 @@
                                 </div>
 
                                 <div class="skills-metrics-list">
+                                    <div class="skill-metric-item">
+                                        <div
+                                            class="sk-icon"
+                                            style="color: var(--color-primary); background: #eef9f7;"
+                                        >
+                                            <i data-feather="clock"></i>
+                                        </div>
+                                        <div class="sk-data">
+                                            <strong>250 Training Hours
+                                                Delivered</strong>
+                                            <p>
+                                                Hands-on training hours delivered across all programmes.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="skill-metric-item">
+                                        <div
+                                            class="sk-icon"
+                                            style="color: var(--color-accent); background: #ecfdf5;"
+                                        >
+                                            <i data-feather="book-open"></i>
+                                        </div>
+                                        <div class="sk-data">
+                                            <strong>85% Certification Success Rate</strong>
+                                            <p>
+                                                Participants who completed accredited assessments.
+                                            </p>
+                                        </div>
+                                    </div>
                                     <div class="skill-metric-item">
                                         <div class="sk-icon">
                                             <i data-feather="award"></i>
@@ -2619,7 +2652,9 @@
                                     />
                                 </div>
                                 <button
+                                    id="talentFiltersBtn"
                                     class="btn btn-outline mobile-filter-trigger"
+                                    aria-expanded="false"
                                     onclick="toggleSecondaryFilters()"
                                 >
                                     <i data-feather="sliders"></i>
@@ -2627,7 +2662,7 @@
                                 </button>
                             </div>
 
-                            <div class="primary-filter-chips">
+                            <div id="talentPrimaryFilters" class="primary-filter-chips hidden">
                                 <button class="chip-btn active">
                                     All Candidates
                                 </button>
@@ -2644,7 +2679,7 @@
                             </div>
 
                             <div
-                                class="secondary-filters-panel hidden-mobile"
+                                class="secondary-filters-panel hidden"
                                 id="advancedFiltersPanel"
                             >
                                 <div class="secondary-grid">
@@ -2955,21 +2990,17 @@
                                     />
                                 </div>
                                 <button
+                                    id="supplierFiltersBtn"
                                     class="btn btn-outline mobile-filter-trigger"
-                                    onclick="
-                                        document
-                                            .getElementById(
-                                                'supplierAdvancedFilters',
-                                            )
-                                            .classList.toggle('hidden-mobile')
-                                    "
+                                    aria-expanded="false"
+                                    onclick="toggleSupplierFilters()"
                                 >
                                     <i data-feather="sliders"></i>
                                     <span>Filters</span>
                                 </button>
                             </div>
 
-                            <div class="primary-filter-chips">
+                            <div id="supplierPrimaryFilters" class="primary-filter-chips hidden">
                                 <button class="chip-btn active">
                                     All Suppliers
                                 </button>
@@ -2981,7 +3012,7 @@
                             </div>
 
                             <div
-                                class="secondary-filters-panel hidden-mobile"
+                                class="secondary-filters-panel hidden"
                                 id="supplierAdvancedFilters"
                             >
                                 <div class="secondary-grid">
@@ -4136,13 +4167,56 @@
             <button class="mob-nav-item" data-target="dashboard-talent">
                 <i data-feather="users"></i>
             </button>
+            <button class="mob-nav-item more-trigger" aria-expanded="false" onclick="toggleMobileMoreMenu()">
+                <i data-feather="more-horizontal"></i>
+            </button>
+        </nav>
+
+        <div id="mobileMoreOverlay" class="mobile-more-overlay hidden" onclick="toggleMobileMoreMenu()"></div>
+        <div id="mobileMoreMenu" class="mobile-more-menu hidden" aria-hidden="true">
+            <button class="mob-nav-item" data-target="dashboard-home">
+                <i data-feather="home"></i>
+                <span>Home</span>
+            </button>
+            <button class="mob-nav-item" data-target="dashboard-post">
+                <i data-feather="plus-circle"></i>
+                <span>Post Opportunity</span>
+            </button>
+            <button class="mob-nav-item" data-target="dashboard-talent">
+                <i data-feather="users"></i>
+                <span>Talent Pool</span>
+            </button>
+            <hr style="border:none;border-top:1px solid var(--color-border);margin:6px 0;" />
             <button class="mob-nav-item" data-target="dashboard-applications">
                 <i data-feather="trello"></i>
+                <span>Active Listings</span>
+            </button>
+            <button class="mob-nav-item" data-target="dashboard-suppliers">
+                <i data-feather="briefcase"></i>
+                <span>Supplier Directory</span>
+            </button>
+            <button class="mob-nav-item" data-target="dashboard-feedback">
+                <i data-feather="star"></i>
+                <span>Feedback & Ratings</span>
+            </button>
+            <button class="mob-nav-item" data-target="dashboard-impact">
+                <i data-feather="bar-chart-2"></i>
+                <span>Impact Dashboard</span>
             </button>
             <button class="mob-nav-item" data-target="dashboard-notifications">
                 <i data-feather="bell"></i>
+                <span>Notifications</span>
             </button>
-        </nav>
+            <hr style="border:none;border-top:1px solid var(--color-border);margin:6px 0;" />
+            <button class="mob-nav-item" onclick="alert('Help & Support — open help center')">
+                <i data-feather="help-circle"></i>
+                <span>Help & Support</span>
+            </button>
+            <button class="mob-nav-item" onclick="location.href='portal.html'">
+                <i data-feather="log-out"></i>
+                <span>Sign Out</span>
+            </button>
+        </div>
 
         <div
             class="drawer-overlay hidden"
@@ -4652,6 +4726,52 @@
             </div>
         </div>
 
+        <!-- Preview modals for Active Postings -->
+        <div class="modal-overlay hidden" id="applicantsModalOverlay" onclick="closeApplicantsPreview()"></div>
+        <div class="preview-modal hidden" id="applicantsModal" role="dialog" aria-modal="true" aria-labelledby="applicantsModalTitle">
+            <div class="preview-modal-header">
+                <h3 id="applicantsModalTitle">Applicants Preview</h3>
+                <button class="btn btn-text" onclick="closeApplicantsPreview()">Close</button>
+            </div>
+            <div class="preview-modal-body" id="applicantsModalBody">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="bidsModalOverlay" onclick="closeBidsPreview()"></div>
+        <div class="preview-modal hidden" id="bidsModal" role="dialog" aria-modal="true" aria-labelledby="bidsModalTitle">
+            <div class="preview-modal-header">
+                <h3 id="bidsModalTitle">Bids Preview</h3>
+                <button class="btn btn-text" onclick="closeBidsPreview()">Close</button>
+            </div>
+            <div class="preview-modal-body" id="bidsModalBody">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="archiveModalOverlay" onclick="closeArchiveView()"></div>
+        <div class="preview-modal hidden" id="archiveModal" role="dialog" aria-modal="true" aria-labelledby="archiveModalTitle">
+            <div class="preview-modal-header">
+                <h3 id="archiveModalTitle">Archive Details</h3>
+                <button class="btn btn-text" onclick="closeArchiveView()">Close</button>
+            </div>
+            <div class="preview-modal-body" id="archiveModalBody">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+
+        <div class="modal-overlay hidden" id="vettedModalOverlay" onclick="closeVettedView()"></div>
+        <div class="preview-modal hidden" id="vettedModal" role="dialog" aria-modal="true" aria-labelledby="vettedModalTitle">
+            <div class="preview-modal-header">
+                <h3 id="vettedModalTitle">Vetted Suppliers</h3>
+                <button class="btn btn-text" onclick="closeVettedView()">Close</button>
+            </div>
+            <div class="preview-modal-body" id="vettedModalBody">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
         <script src="dashboard-employer.js"></script>
     </body>
 </html>

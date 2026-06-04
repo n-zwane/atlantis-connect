@@ -39,12 +39,22 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.addEventListener("click", (e) => {
             const targetId = e.currentTarget.getAttribute("data-target");
             switchPage(targetId);
+            // Close mobile 'More' menu if open
+            const mobileMenu = document.getElementById('mobileMoreMenu');
+            const mobileOverlay = document.getElementById('mobileMoreOverlay');
+            const mobileMoreBtn = document.getElementById('mobileMoreBtn');
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                if (mobileOverlay) mobileOverlay.classList.add('hidden');
+                if (mobileMoreBtn) mobileMoreBtn.setAttribute('aria-expanded', 'false');
+            }
         });
     });
 
-    // 3. Time-Based Greeting
+    // 3. Time-Based Greeting (only set if element exists)
     const updateGreeting = () => {
         const greetingEl = document.getElementById("timeGreeting");
+        if (!greetingEl) return; // greeting removed intentionally
         const hour = new Date().getHours();
         let greeting = "Good evening";
 
@@ -55,6 +65,54 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     updateGreeting();
 
+        // 4. Mobile Sidebar Toggle wiring
+        const mobileToggle = document.getElementById("mobileSidebarToggle");
+        if (mobileToggle) {
+            // ensure the toggle only shows on small screens
+            const checkToggleVisibility = () => {
+                if (window.innerWidth <= 768) {
+                    mobileToggle.classList.remove("hidden");
+                } else {
+                    mobileToggle.classList.add("hidden");
+                }
+            };
+            checkToggleVisibility();
+            window.addEventListener("resize", checkToggleVisibility);
+        }
+
+        // Show/hide the top-left mobile nav toggle on small screens
+        const mobileMoreToggle = document.getElementById('mobileMoreBtn');
+        if (mobileMoreToggle) {
+            const checkMoreToggle = () => {
+                if (window.innerWidth <= 768) mobileMoreToggle.classList.remove('hidden');
+                else mobileMoreToggle.classList.add('hidden');
+            };
+            checkMoreToggle();
+            window.addEventListener('resize', checkMoreToggle);
+        }
+
+
+    window.toggleSidebar = () => {
+        const sb = document.getElementById("desktopSidebar");
+        const toggle = document.getElementById("mobileSidebarToggle");
+        if (!sb || !toggle) return;
+        const expanded = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", (!expanded).toString());
+        sb.style.display = expanded ? "none" : "flex";
+    };
+
+// Mobile More menu toggle
+window.toggleMobileMoreMenu = () => {
+    const menu = document.getElementById('mobileMoreMenu');
+    const overlay = document.getElementById('mobileMoreOverlay');
+    const btn = document.getElementById('mobileMoreBtn');
+    if (menu) menu.classList.toggle('hidden');
+    if (overlay) overlay.classList.toggle('hidden');
+    if (btn) {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', (!expanded).toString());
+    }
+};
     // 4. Animate Number (Local Hire Rate)
     const animateValue = (obj, start, end, duration) => {
         let startTimestamp = null;
@@ -77,6 +135,24 @@ document.addEventListener("DOMContentLoaded", () => {
         const rateObj = document.getElementById("localHireRate");
         if (rateObj) animateValue(rateObj, 0, 78, 1500);
     }, 500);
+
+    // Wire up PDF download button (if present)
+    const pdfBtn = document.getElementById('downloadHiresPdfBtn');
+    if (pdfBtn) {
+        pdfBtn.addEventListener('click', () => {
+            if (typeof window.downloadLocalHiresPDF === 'function') {
+                window.downloadLocalHiresPDF();
+            } else if (typeof window.initChart === 'function') {
+                // ensure chart is initialized then try again
+                window.initChart();
+                setTimeout(() => {
+                    if (typeof window.downloadLocalHiresPDF === 'function') window.downloadLocalHiresPDF();
+                }, 400);
+            } else {
+                alert('Preparing report — please try again shortly.');
+            }
+        });
+    }
 });
 
 // 5. Form Revealer (Post Opportunity Page)
@@ -135,7 +211,8 @@ window.initChart = () => {
     const ctx = document.getElementById("hiresChart");
     if (!ctx) return;
 
-    new Chart(ctx, {
+    // expose the chart instance globally so other routines (PDF export) can access it
+    window.hiresChartInstance = new Chart(ctx, {
         type: "bar",
         data: {
             labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
@@ -166,7 +243,152 @@ window.initChart = () => {
             },
         },
     });
+    // Initialize B-BBEE Transformation Spend chart (doughnut) if canvas present
+    const bbCtx = document.getElementById('bbbeeChart');
+    if (bbCtx) {
+        try {
+            window.bbbeeChartInstance = new Chart(bbCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'Black Women-Owned Entities',
+                        'Youth-Owned Entities',
+                        'Other / Small Suppliers',
+                    ],
+                    datasets: [
+                        {
+                            data: [60, 35, 5],
+                            backgroundColor: [
+                                '#0f9f68', // accent
+                                '#0ea5e9', // blue
+                                '#e6efef', // light
+                            ],
+                            hoverOffset: 6,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) {
+                                    const v = ctx.parsed || 0;
+                                    const label = ctx.label || '';
+                                    return `${label}: ${v}%`;
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+        } catch (err) {
+            console.warn('Could not initialize B-BBEE chart', err);
+        }
+    }
+
     isChartInitialized = true;
+};
+
+// PDF generation for Local Hires Analytics
+window.downloadLocalHiresPDF = async () => {
+    const jspdfGlobal = window.jspdf || window.jspdf;
+    const jsPDF = jspdfGlobal?.jsPDF || window.jsPDF;
+    if (!jsPDF) {
+        alert('PDF library not loaded.');
+        return;
+    }
+
+    // Ensure chart instance exists
+    if (!window.hiresChartInstance && typeof window.initChart === 'function') {
+        window.initChart();
+    }
+
+    // Prepare data
+    const companyName =
+        document.querySelector('.company-name')?.innerText || document.title || 'Employer Hub';
+    const generatedAt = new Date().toLocaleString();
+
+    const stats = [];
+    document.querySelectorAll('.stats-grid .stat-card').forEach((card) => {
+        const label = card.querySelector('.stat-label')?.innerText || '';
+        const value = card.querySelector('.stat-value')?.innerText || '';
+        if (label || value) stats.push({ label: label.trim(), value: value.trim() });
+    });
+
+    // Get chart image (prefer Chart.js exported image)
+    let chartImg;
+    try {
+        if (window.hiresChartInstance && typeof window.hiresChartInstance.toBase64Image === 'function') {
+            chartImg = window.hiresChartInstance.toBase64Image();
+        }
+    } catch (e) {
+        // ignore and fallback
+    }
+    if (!chartImg) {
+        const canvas = document.getElementById('hiresChart');
+        if (canvas && canvas.toDataURL) chartImg = canvas.toDataURL('image/png');
+    }
+
+    const doc = new jsPDF({ unit: 'pt', format: 'a4', orientation: 'portrait' });
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 40;
+    let y = 40;
+
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`${companyName} — Local Hire Analytics`, margin, y);
+    y += 18;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Generated: ${generatedAt}`, margin, y);
+    y += 18;
+
+    const addStatsList = () => {
+        doc.setFontSize(12);
+        stats.forEach((s) => {
+            if (y > doc.internal.pageSize.getHeight() - margin - 30) {
+                doc.addPage();
+                y = margin;
+            }
+            doc.text(`${s.label}: ${s.value}`, margin, y);
+            y += 16;
+        });
+    };
+
+    if (chartImg) {
+        const img = new Image();
+        img.onload = () => {
+            const imgW = img.width;
+            const imgH = img.height;
+            const pdfW = pageWidth - margin * 2;
+            const pdfH = (imgH * pdfW) / imgW;
+            if (y + pdfH > doc.internal.pageSize.getHeight() - margin) {
+                doc.addPage();
+                y = margin;
+            }
+            doc.addImage(img, 'PNG', margin, y, pdfW, pdfH);
+            y += pdfH + 16;
+            addStatsList();
+            const fname = `local-hires-analytics-${new Date().toISOString().slice(0,10)}.pdf`;
+            doc.save(fname);
+        };
+        img.onerror = () => {
+            doc.text('Chart could not be rendered.', margin, y);
+            y += 16;
+            addStatsList();
+            doc.save(`local-hires-analytics-${new Date().toISOString().slice(0,10)}.pdf`);
+        };
+        img.src = chartImg;
+    } else {
+        doc.text('Chart unavailable.', margin, y);
+        y += 16;
+        addStatsList();
+        doc.save(`local-hires-analytics-${new Date().toISOString().slice(0,10)}.pdf`);
+    }
 };
 // --- OPPORTUNITY TRACKING MANAGEMENT FUNCTIONS ---
 
@@ -213,8 +435,30 @@ window.changePostingStatus = (buttonElement, targetStatusLabel) => {
 // 1. Mobile Filter Slider Toggle Trigger Component
 window.toggleSecondaryFilters = () => {
     const panel = document.getElementById("advancedFiltersPanel");
-    if (panel) {
-        panel.classList.toggle("hidden-mobile");
+    const chips = document.getElementById("talentPrimaryFilters");
+    const btn = document.getElementById("talentFiltersBtn");
+
+    if (panel) panel.classList.toggle("hidden");
+    if (chips) chips.classList.toggle("hidden");
+
+    if (btn) {
+        const expanded = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", (!expanded).toString());
+    }
+};
+
+// 2a. Supplier Directory Filters Toggle
+window.toggleSupplierFilters = () => {
+    const panel = document.getElementById("supplierAdvancedFilters");
+    const chips = document.getElementById("supplierPrimaryFilters");
+    const btn = document.getElementById("supplierFiltersBtn");
+
+    if (panel) panel.classList.toggle("hidden");
+    if (chips) chips.classList.toggle("hidden");
+
+    if (btn) {
+        const expanded = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", (!expanded).toString());
     }
 };
 
@@ -650,4 +894,258 @@ window.sendTestAlert = () => {
             "2. Email Gateway (pieter.v@ecovanguard.co.za)\n" +
             "3. WhatsApp Gateway (+27 82 555 0192)",
     );
+};
+
+// --- Active Postings: Applicants & Bids Preview Modals ---
+window.openApplicantsPreview = (btn) => {
+    const card = btn.closest('.posting-row-card');
+    if (!card) return;
+    const title = card.querySelector('.posting-title-row h4')?.innerText?.trim() || 'Applicants';
+    const details = card.querySelector('.posting-details')?.innerText?.trim() || '';
+
+    const metrics = {};
+    card.querySelectorAll('.posting-metrics .metric-box').forEach((m) => {
+        const num = m.querySelector('.metric-num')?.innerText?.trim() || '';
+        const lbl = m.querySelector('.metric-lbl')?.innerText?.trim() || '';
+        if (lbl) metrics[lbl] = num;
+    });
+
+    const applicantsNum = parseInt(metrics['Applicants'] || metrics['Applicants'] || 0, 10) || 0;
+    const sampleCount = Math.min(applicantsNum || 3, 6);
+    const sampleNames = ['Sipho M.', 'Thandi N.', 'Aisha K.', 'John S.', 'Zanele Q.', 'Lwazi P.'];
+
+    const bodyEl = document.getElementById('applicantsModalBody');
+    bodyEl.innerHTML = '';
+
+    const headerHtml = `<div style="margin-bottom:8px"><strong>${title}</strong><div style="color:var(--color-text-muted);font-size:0.9rem">${details}</div></div>`;
+    bodyEl.insertAdjacentHTML('beforeend', headerHtml);
+
+    const statsHtml = '<div style="display:flex;gap:1rem;margin-bottom:10px;flex-wrap:wrap">' +
+        Object.keys(metrics).map(k => `<div class="preview-badge">${k}: <strong style="margin-left:6px">${metrics[k]}</strong></div>`).join('') +
+        '</div>';
+    bodyEl.insertAdjacentHTML('beforeend', statsHtml);
+
+    const listContainer = document.createElement('div');
+    for (let i = 0; i < sampleCount; i++) {
+        const name = sampleNames[i % sampleNames.length];
+        const days = Math.floor(Math.random() * 10) + 1;
+        const score = Math.floor(50 + Math.random() * 50);
+        const row = document.createElement('div');
+        row.className = 'preview-row';
+        row.innerHTML = `<div class="meta"><strong>${name}</strong><div style="color:var(--color-text-muted);font-size:0.85rem">Applied ${days} days ago — ${score}% match</div></div><div style="display:flex;gap:0.5rem"><button class="btn btn-outline btn-sm" onclick="openPassportDrawer('${name}', ${score})">View Profile</button><button class="btn btn-primary btn-sm" onclick="openShortlistWorkflow('${name}')">Shortlist</button></div>`;
+        listContainer.appendChild(row);
+    }
+    bodyEl.appendChild(listContainer);
+
+    bodyEl.insertAdjacentHTML('beforeend', `<div style="margin-top:12px;display:flex;justify-content:flex-end"><button class="btn btn-outline" onclick="openApplicationPipeline('${title.replace(/'/g, "\\'")}')">Open Full Pipeline</button></div>`);
+
+    document.getElementById('applicantsModalOverlay').classList.remove('hidden');
+    document.getElementById('applicantsModal').classList.remove('hidden');
+    if (window.feather) window.feather.replace();
+};
+
+window.closeApplicantsPreview = () => {
+    document.getElementById('applicantsModalOverlay').classList.add('hidden');
+    document.getElementById('applicantsModal').classList.add('hidden');
+};
+
+window.openBidsPreview = (btn) => {
+    const card = btn.closest('.posting-row-card');
+    if (!card) return;
+    const title = card.querySelector('.posting-title-row h4')?.innerText?.trim() || 'Bids';
+    const details = card.querySelector('.posting-details')?.innerText?.trim() || '';
+
+    const metrics = {};
+    card.querySelectorAll('.posting-metrics .metric-box').forEach((m) => {
+        const num = m.querySelector('.metric-num')?.innerText?.trim() || '';
+        const lbl = m.querySelector('.metric-lbl')?.innerText?.trim() || '';
+        if (lbl) metrics[lbl] = num;
+    });
+
+    const bidsNum = parseInt(metrics['Bids Recieved'] || metrics['Bids Received'] || 0, 10) || parseInt(metrics['Bids'] || 0, 10) || 0;
+    const sampleCount = Math.min(bidsNum || 3, 6);
+    const bidderNames = ['Ocean Supplies', 'GreenGate Contractors', 'SteelWorks Pty', 'WestCoast Trading', 'Atlas Fabrications', 'Harbor Builders'];
+
+    const bodyEl = document.getElementById('bidsModalBody');
+    bodyEl.innerHTML = '';
+
+    const headerHtml = `<div style="margin-bottom:8px"><strong>${title}</strong><div style="color:var(--color-text-muted);font-size:0.9rem">${details}</div></div>`;
+    bodyEl.insertAdjacentHTML('beforeend', headerHtml);
+
+    const statsHtml = '<div style="display:flex;gap:1rem;margin-bottom:10px;flex-wrap:wrap">' +
+        Object.keys(metrics).map(k => `<div class="preview-badge">${k}: <strong style="margin-left:6px">${metrics[k]}</strong></div>`).join('') +
+        '</div>';
+    bodyEl.insertAdjacentHTML('beforeend', statsHtml);
+
+    const listContainer = document.createElement('div');
+    for (let i = 0; i < sampleCount; i++) {
+        const name = bidderNames[i % bidderNames.length];
+        const amount = (Math.floor(50 + Math.random() * 450) * 100).toLocaleString();
+        const row = document.createElement('div');
+        row.className = 'preview-row';
+        row.innerHTML = `<div class="meta"><strong>${name}</strong><div style="color:var(--color-text-muted);font-size:0.85rem">Proposed: R${amount} — Submitted ${Math.floor(Math.random()*10)+1} days ago</div></div><div style="display:flex;flex-direction:column;gap:6px"><button class="btn btn-outline btn-sm" onclick="openSupplierDrawer('${name}', ${Math.floor(60+Math.random()*40)})">View Supplier</button><button class="btn btn-primary btn-sm" onclick="alert('Contacting ${name}...')">Contact Bidder</button></div>`;
+        listContainer.appendChild(row);
+    }
+    bodyEl.appendChild(listContainer);
+
+    bodyEl.insertAdjacentHTML('beforeend', `<div style="margin-top:12px;display:flex;justify-content:flex-end"><button class="btn btn-outline" onclick="alert('Open full procurement workspace')">Open Full Bids Workspace</button></div>`);
+
+    document.getElementById('bidsModalOverlay').classList.remove('hidden');
+    document.getElementById('bidsModal').classList.remove('hidden');
+    if (window.feather) window.feather.replace();
+};
+
+window.closeBidsPreview = () => {
+    document.getElementById('bidsModalOverlay').classList.add('hidden');
+    document.getElementById('bidsModal').classList.add('hidden');
+};
+
+// --- Past & Closed: Archive / Vetted previews and Relist action ---
+window.openArchiveView = (btn) => {
+    const card = btn.closest('.posting-row-card');
+    if (!card) return;
+    const title = card.querySelector('.posting-title-row h4')?.innerText?.trim() || 'Archive Item';
+    const details = card.querySelector('.posting-details')?.innerText?.trim() || '';
+
+    const metrics = {};
+    card.querySelectorAll('.posting-metrics .metric-box').forEach((m) => {
+        const num = m.querySelector('.metric-num')?.innerText?.trim() || '';
+        const lbl = m.querySelector('.metric-lbl')?.innerText?.trim() || '';
+        if (lbl) metrics[lbl] = num;
+    });
+
+    let bodyEl = document.getElementById('archiveModalBody');
+    if (!bodyEl) return;
+    bodyEl.innerHTML = '';
+
+    bodyEl.insertAdjacentHTML('beforeend', `<div style="margin-bottom:8px"><strong>${title}</strong><div style="color:var(--color-text-muted);font-size:0.9rem">${details}</div></div>`);
+    bodyEl.insertAdjacentHTML('beforeend', '<div style="display:flex;gap:1rem;margin-bottom:10px;flex-wrap:wrap">' +
+        Object.keys(metrics).map(k => `<div class="preview-badge">${k}: <strong style="margin-left:6px">${metrics[k]}</strong></div>`).join('') +
+        '</div>');
+
+    // store a temporary reference to the card so modal buttons can act on it
+    window.__archiveRelistTarget = card;
+    bodyEl.insertAdjacentHTML('beforeend', `<div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center"><button class="btn btn-accent" onclick="relistPosting(window.__archiveRelistTarget)">Relist</button><button class="btn btn-outline" onclick="closeArchiveView()">Close</button></div>`);
+
+    document.getElementById('archiveModalOverlay').classList.remove('hidden');
+    document.getElementById('archiveModal').classList.remove('hidden');
+    if (window.feather) window.feather.replace();
+};
+
+window.closeArchiveView = () => {
+    document.getElementById('archiveModalOverlay').classList.add('hidden');
+    document.getElementById('archiveModal').classList.add('hidden');
+};
+
+window.openVettedView = (btn) => {
+    const card = btn.closest('.posting-row-card');
+    if (!card) return;
+    const title = card.querySelector('.posting-title-row h4')?.innerText?.trim() || 'Vetted Suppliers';
+    const details = card.querySelector('.posting-details')?.innerText?.trim() || '';
+
+    const metrics = {};
+    card.querySelectorAll('.posting-metrics .metric-box').forEach((m) => {
+        const num = m.querySelector('.metric-num')?.innerText?.trim() || '';
+        const lbl = m.querySelector('.metric-lbl')?.innerText?.trim() || '';
+        if (lbl) metrics[lbl] = num;
+    });
+
+    let bodyEl = document.getElementById('vettedModalBody');
+    if (!bodyEl) return;
+    bodyEl.innerHTML = '';
+
+    bodyEl.insertAdjacentHTML('beforeend', `<div style="margin-bottom:8px"><strong>${title}</strong><div style="color:var(--color-text-muted);font-size:0.9rem">${details}</div></div>`);
+    bodyEl.insertAdjacentHTML('beforeend', '<div style="display:flex;gap:1rem;margin-bottom:10px;flex-wrap:wrap">' +
+        Object.keys(metrics).map(k => `<div class="preview-badge">${k}: <strong style="margin-left:6px">${metrics[k]}</strong></div>`).join('') +
+        '</div>');
+
+    // Sample vetted suppliers list
+    const vetted = ['West Coast Supplies', 'Harbor Warehouse', 'Local Steelworks'];
+    const listContainer = document.createElement('div');
+    vetted.forEach((v) => {
+        const row = document.createElement('div');
+        row.className = 'preview-row';
+        row.innerHTML = `<div class="meta"><strong>${v}</strong><div style="color:var(--color-text-muted);font-size:0.85rem">Vetted supplier — Verified credentials</div></div><div><button class="btn btn-outline btn-sm" onclick="openSupplierDrawer('${v}', 85)">Profile</button></div>`;
+        listContainer.appendChild(row);
+    });
+    bodyEl.appendChild(listContainer);
+
+    bodyEl.insertAdjacentHTML('beforeend', `<div style="margin-top:12px;display:flex;justify-content:flex-end"><button class="btn btn-outline" onclick="closeVettedView()">Close</button></div>`);
+
+    document.getElementById('vettedModalOverlay').classList.remove('hidden');
+    document.getElementById('vettedModal').classList.remove('hidden');
+    if (window.feather) window.feather.replace();
+};
+
+window.closeVettedView = () => {
+    document.getElementById('vettedModalOverlay').classList.add('hidden');
+    document.getElementById('vettedModal').classList.add('hidden');
+};
+
+window.relistPosting = (btnOrCard) => {
+    // Accept either the button element or the card element
+    let card = null;
+    if (!btnOrCard) return;
+    if (btnOrCard.classList && btnOrCard.classList.contains && btnOrCard.classList.contains('posting-row-card')) {
+        card = btnOrCard;
+    } else {
+        card = btnOrCard.closest ? btnOrCard.closest('.posting-row-card') : null;
+    }
+    if (!card) return;
+
+    if (!confirm('Relist this posting? Views and applicants will be reset to 0.')) return;
+
+    // Reset metric numbers
+    card.querySelectorAll('.metric-num').forEach((el) => (el.innerText = '0'));
+
+    // Update status badge to 'Active'
+    const statusBadge = card.querySelector('.posting-title-row .badge');
+    if (statusBadge) {
+        statusBadge.className = 'badge badge-success';
+        statusBadge.innerText = 'Active';
+    } else {
+        const titleRow = card.querySelector('.posting-title-row');
+        if (titleRow) {
+            const span = document.createElement('span');
+            span.className = 'badge badge-success';
+            span.innerText = 'Active';
+            titleRow.appendChild(span);
+        }
+    }
+
+    // Remove archived marker class
+    card.classList.remove('archived-card');
+
+    // Replace posting-actions with active-posting controls
+    const actions = card.querySelector('.posting-actions');
+    if (actions) {
+        actions.innerHTML = `
+            <button class="btn btn-primary btn-sm" onclick="openApplicantsPreview(this)">View Applicants</button>
+            <button class="btn btn-outline btn-icon-sm" title="Edit Listing"><i data-feather="edit-2"></i></button>
+            <button class="btn btn-outline-danger btn-icon-sm" title="Close Listing" onclick="changePostingStatus(this, 'Closed')"><i data-feather="x-circle"></i></button>
+        `;
+    }
+
+    // Move to Active Postings list
+    const activeList = document.querySelector('#active-postings .postings-list');
+    if (activeList) activeList.prepend(card);
+
+    // Update tab counts if present
+    const tabs = document.querySelector('.management-tabs');
+    if (tabs) {
+        const tabBtns = tabs.querySelectorAll('.tab-btn');
+        const activeBtn = tabBtns[0];
+        const pastBtn = tabBtns[1];
+        if (activeBtn) {
+            const c = activeBtn.querySelector('.tab-count');
+            if (c) c.innerText = String((parseInt(c.innerText || '0', 10) || 0) + 1);
+        }
+        if (pastBtn) {
+            const p = pastBtn.querySelector('.tab-count');
+            if (p) p.innerText = String(Math.max(0, (parseInt(p.innerText || '0', 10) || 0) - 1));
+        }
+    }
+
+    if (window.feather) window.feather.replace();
+    alert('Posting relisted and moved to Active Postings.');
 };

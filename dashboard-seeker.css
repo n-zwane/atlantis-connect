@@ -1168,6 +1168,51 @@ body {
         font-weight: 500;
         cursor: pointer;
     }
+
+    /* ---- HORIZONTAL OVERFLOW FIXES ---- */
+
+    /* Stop the viewport itself from ever scrolling sideways */
+    body {
+        overflow-x: hidden;
+    }
+
+    /* Constrain the main content canvas */
+    .scrollable-stage,
+    .dashboard-page {
+        box-sizing: border-box;
+        max-width: 100%;
+    }
+
+    /* Stats grid: 2 columns is comfortable on mobile */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Opportunities grid already collapses at 1024px; keep it single-column */
+    .opportunities-card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Collapse every inline-style multi-column grid (Daily Action + Recent Activity
+       split, badges grid, feedback grid, training catalogue grid, settings grid, etc.) */
+    .dashboard-page [style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Achievements panel: 2 columns is still readable, override the 1fr above */
+    .dashboard-page .achievements-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* Ensure no card element can bust the viewport width */
+    .opp-listing-card,
+    .pipeline-card-item,
+    .badge-card,
+    .featured-training-card,
+    .modal-box-panel {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
 }
 
 /* SCROLLABLE ROUTING CANVAS STAGE */

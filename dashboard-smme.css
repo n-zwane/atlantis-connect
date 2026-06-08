@@ -107,7 +107,10 @@ body {
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
-    height: 100%;
+    /* Make sidebar independently scrollable so footer is reachable on smaller viewports */
+    height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     z-index: 100;
     border-right: 1px solid rgba(255, 255, 255, 0.05);
     transition: var(--transition-smooth);
@@ -264,6 +267,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    margin-top: auto; /* push footer to bottom of sidebar */
 }
 
 .logout-trigger-btn {

@@ -1441,13 +1441,23 @@ document.addEventListener("DOMContentLoaded", () => {
         window.showDashboardPage("home-dashboard");
     };
 
-    // LOGOUT ACTIONS
-    document.querySelectorAll(".logout-trigger-btn").forEach((btn) => {
+    // LOGOUT ACTIONS — clear session and redirect to portal
+    document.querySelectorAll(".logout-trigger-btn, .logout-btn").forEach((btn) => {
         btn.addEventListener("click", (e) => {
-            // e.preventDefault(); // Uncomment if you don't want it to actually navigate to portal.html during testing
+            e.preventDefault();
             if (confirm("Are you sure you want to sign out?")) {
-                localStorage.removeItem("activeDashboardPage");
-                window.location.reload();
+                // remove common session keys used by dashboards
+                try {
+                    localStorage.removeItem("activeDashboardPage");
+                    localStorage.removeItem("userToken");
+                    localStorage.removeItem("userSession");
+                    localStorage.removeItem("currentUser");
+                } catch (err) {
+                    console.warn("logout: failed to clear some localStorage keys", err);
+                }
+
+                // redirect to portal (login) page
+                window.location.href = "portal.html";
             }
         });
     });

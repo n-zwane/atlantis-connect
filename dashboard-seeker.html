@@ -14,6 +14,7 @@
     </head>
     <body>
         <div class="dashboard-layout">
+            <div class="sidebar-mobile-overlay" id="sidebarOverlay"></div>
             <aside class="sidebar">
                 <div class="sidebar-brand">
                     <span class="brand-name">Atlantis Connect</span>
@@ -128,6 +129,11 @@
 
             <div class="main-content-wrapper">
                 <header class="app-header">
+                    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
                     <div class="header-search-box">
                         <svg
                             class="search-icon"
@@ -341,6 +347,8 @@
                                             style="
                                                 padding: 0.5rem 1rem;
                                                 font-size: 0.85rem;
+                                                color: #fbfffb;
+                                                background-color: #0F9F68;
                                             "
                                         >
                                             Resume Course
@@ -2238,24 +2246,10 @@
                                             >
                                             <span>60% Completed</span>
                                         </div>
-                                        <div
-                                            style="
-                                                width: 100%;
-                                                background: #eef2f2;
-                                                height: 10px;
-                                                border-radius: 5px;
-                                                overflow: hidden;
-                                            "
-                                        >
+                                        <div class="training-progress-track">
                                             <div
-                                                style="
-                                                    width: 60%;
-                                                    background: var(
-                                                        --color-accent
-                                                    );
-                                                    height: 100%;
-                                                    border-radius: 5px;
-                                                "
+                                                class="training-progress-fill"
+                                                style="width: 60%;"
                                             ></div>
                                         </div>
                                     </div>

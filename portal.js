@@ -58,6 +58,46 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = explicitDestinationTarget;
         });
     });
+
+    // --- URL PARAMS: preselect tab and registration role ---
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const tabParam = params.get("tab");
+        const roleParam = params.get("role");
+
+        if (tabParam) {
+            // normalize and apply tab selection (login | register)
+            const normalized = String(tabParam).toLowerCase();
+            if (normalized === "register" || normalized === "login") {
+                // Clear current active states
+                tabButtons.forEach((btn) => btn.classList.remove("active"));
+                forms.forEach((form) => form.classList.remove("active"));
+
+                const targetBtn = document.querySelector(
+                    `.tab-btn[data-tab="${normalized}"]`
+                );
+                if (targetBtn) targetBtn.classList.add("active");
+
+                const targetFormId = normalized === "login" ? "loginForm" : "registerForm";
+                const targetForm = document.getElementById(targetFormId);
+                if (targetForm) targetForm.classList.add("active");
+            }
+        }
+
+        if (roleParam) {
+            const role = String(roleParam).toLowerCase();
+            const regRoleEl = document.getElementById("regRole");
+            if (regRoleEl) {
+                const option = Array.from(regRoleEl.options).find(
+                    (o) => o.value.toLowerCase() === role
+                );
+                if (option) regRoleEl.value = option.value;
+            }
+        }
+    } catch (err) {
+        // silent fail — do not block portal functionality
+        console.warn("portal: failed to apply URL params", err);
+    }
 });
 
 // --- MOBILE NAVIGATION DRAWER CONTROLLER ---

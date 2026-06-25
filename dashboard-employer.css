@@ -32,14 +32,12 @@ body {
     font-family: var(--font-body);
     background-color: var(--color-bg-canvas);
     color: var(--color-text-dark);
-    height: 100vh;
-    overflow: hidden;
 }
 
 /* LAYOUT */
 .app-container {
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 /* SIDEBAR (Desktop) */
@@ -664,17 +662,88 @@ h2 {
     .sidebar {
         display: none;
     }
+    /* hide bottom nav on mobile since we'll use the top-left dropdown */
     .mobile-bottom-nav {
-        display: flex;
+        display: none !important;
     }
+    .mobile-nav-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        color: var(--color-text-muted);
+        font-size: 1.05rem;
+        padding: 0.35rem 0.5rem;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    .mobile-bottom-nav .mob-nav-item {
+        flex: 0 0 56px;
+        min-width: 56px;
+    }
+
+/* Mobile 'More' overlay and sheet */
+.mobile-more-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 1200;
+}
+.mobile-more-menu {
+    position: absolute;
+    top: 56px;
+    left: 8px;
+    width: 260px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    padding: 0.4rem;
+    z-index: 1250;
+    display: block;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+.mobile-more-menu .mob-nav-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 0.6rem 0.5rem;
+    border-radius: 6px;
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    width: 100%;
+}
+.mobile-more-menu .mob-nav-item i,
+.mobile-more-menu .mob-nav-item svg {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+}
+.mobile-more-menu .mob-nav-item span {
+    font-size: 0.95rem;
+    margin-left: 6px;
+    flex: 1 1 auto;
+}
+.mobile-more-menu .mob-nav-item:hover {
+    background: #fbfbfb;
+    color: var(--color-primary);
+    cursor: pointer;
+}
     .main-content {
         padding-bottom: 60px;
+        /* allow main content to scroll naturally on mobile */
+        min-height: 0;
+        height: auto;
     }
     .top-bar {
         padding: 0 1rem;
     }
     .scrollable-stage {
         padding: 1rem;
+        max-height: calc(100vh - 140px);
+        overflow-y: auto;
     }
     .home-grid {
         grid-template-columns: 1fr;
@@ -733,6 +802,55 @@ h2 {
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
+}
+
+/* Preview Modal Styles (Applicants / Bids) */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 2000;
+}
+.preview-modal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 92%;
+    max-width: 900px;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: var(--color-white);
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(2, 6, 23, 0.12);
+    padding: 1rem;
+    z-index: 2001;
+}
+.preview-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+.preview-modal-body {
+    font-size: 0.95rem;
+}
+.preview-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border);
+}
+.preview-row .meta {
+    flex: 1;
+}
+.preview-badge {
+    background: var(--color-primary-light);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    color: var(--color-primary);
 }
 
 /* --- POSTINGS MANAGEMENT SECTION STYLES --- */
@@ -1052,6 +1170,11 @@ h2 {
     margin-bottom: 2rem;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
+
+/* Ensure filter panel can be positioned relative to this container on small screens */
+.talent-filter-container {
+    position: relative;
+}
 .search-main-row {
     display: flex;
     gap: 1rem;
@@ -1237,6 +1360,11 @@ h2 {
     align-items: center;
     gap: 1rem;
     margin-bottom: 1.25rem;
+    justify-content: space-between;
+}
+.candidate-identity {
+    flex: 1;
+    min-width: 0;
 }
 .candidate-avatar-placeholder {
     width: 48px;
@@ -1276,9 +1404,8 @@ h2 {
 
 /* Circular Metrics Ring Element Indicator UI Setup rules */
 .passport-circle-indicator {
-    position: absolute;
-    right: 1.5rem;
-    top: 3.2rem;
+    position: relative;
+    margin-left: auto;
     width: 42px;
     height: 42px;
     border-radius: 50%;
@@ -1300,6 +1427,8 @@ h2 {
     background: white;
     border-radius: 50%;
     z-index: 1;
+    left: 4px;
+    top: 4px;
 }
 .strength-num {
     font-size: 0.7rem;
@@ -1752,12 +1881,14 @@ h2 {
         left: 0;
         width: 100%;
         background: white;
-        z-index: 10;
+        z-index: 50;
         border: 1px solid var(--color-border);
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
         padding: 1rem;
         box-sizing: border-box;
+        max-height: 60vh;
+        overflow-y: auto;
     }
     .secondary-grid {
         grid-template-columns: 1fr;
@@ -2970,6 +3101,13 @@ h2 {
     color: var(--color-accent);
 }
 
+/* bbbee chart wrapper so we can control height per viewport */
+.bbbee-chart-wrapper {
+    height: 180px;
+    width: 100%;
+    position: relative;
+}
+
 /* Skills Specifics */
 .skills-metrics-list {
     display: flex;
@@ -3080,6 +3218,28 @@ h2 {
     }
     .export-actions {
         flex-wrap: wrap;
+    }
+}
+
+/* Desktop layout tweaks: reduce white space under B-BBEE card */
+@media (min-width: 993px) {
+    .analytics-masonry-grid .analytics-card {
+        justify-content: space-between;
+    }
+
+    /* slightly reduce chart height on larger screens and ensure canvas fills wrapper */
+    .bbbee-chart-wrapper {
+        height: 140px;
+    }
+    .bbbee-chart-wrapper canvas {
+        width: 100% !important;
+        height: 100% !important;
+        display: block;
+    }
+
+    /* tighten spacing under micro stats */
+    .smme-stats-grid {
+        gap: 0.75rem;
     }
 }
 

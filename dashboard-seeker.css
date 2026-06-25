@@ -562,12 +562,18 @@ body {
     border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
-    flex-grow: 1;
+    width: fit-content;
     text-align: center;
     transition: var(--transition-smooth);
 }
 .btn-primary-apply:hover {
     background: var(--color-accent-hover);
+}
+
+/* Apply button fills the remaining space only inside listing action rows */
+.listing-actions .btn-primary-apply {
+    flex-grow: 1;
+    width: auto;
 }
 
 /* PAGE 3 UI COMPONENTS: APPLICATION TRACKING BOARD */
@@ -852,6 +858,22 @@ body {
     border-radius: 6px;
     font-weight: 600;
     cursor: pointer;
+}
+
+/* ACTIVE TRAINING PROGRESS BAR */
+.training-progress-track {
+    width: 100%;
+    background: #e4ecee;
+    height: 12px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.training-progress-fill {
+    height: 100%;
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-primary) 100%);
+    box-shadow: 0 2px 8px rgba(15, 159, 104, 0.35);
+    transition: width 0.6s ease;
 }
 
 /* PAGE 6 UI: NOTIFICATIONS PIPELINE */
@@ -1168,6 +1190,67 @@ body {
         font-weight: 500;
         cursor: pointer;
     }
+
+    /* ---- HORIZONTAL OVERFLOW FIXES ---- */
+
+    /* Stop the viewport itself from ever scrolling sideways */
+    body {
+        overflow-x: hidden;
+    }
+
+    /* Constrain the main content canvas */
+    .scrollable-stage,
+    .dashboard-page {
+        box-sizing: border-box;
+        max-width: 100%;
+    }
+
+    /* Stats grid: brute-force vertical stack on mobile */
+    .stats-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        overflow-x: hidden !important;
+    }
+    .stats-grid .stat-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Opportunities grid already collapses at 1024px; keep it single-column */
+    .opportunities-card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Collapse every inline-style multi-column grid (Daily Action + Recent Activity
+       split, badges grid, feedback grid, training catalogue grid, settings grid, etc.) */
+    .dashboard-page [style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Achievements panel: 2 columns is still readable, override the 1fr above */
+    .dashboard-page .achievements-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* Ensure no card element can bust the viewport width */
+    .opp-listing-card,
+    .pipeline-card-item,
+    .badge-card,
+    .featured-training-card,
+    .modal-box-panel {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Settings toggle rows: constrain width and add right padding so
+       the checkbox never bleeds off the right edge of the screen */
+    #dashboard-settings [style*="justify-content: space-between"] {
+        max-width: 100%;
+        box-sizing: border-box;
+        padding-right: 0.75rem;
+    }
 }
 
 /* SCROLLABLE ROUTING CANVAS STAGE */
@@ -1282,4 +1365,58 @@ button {
 }
 .btn-primary-apply:hover {
     background: var(--color-accent-hover);
+}
+
+/* ---- MOBILE HAMBURGER MENU ---- */
+.hamburger-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 28px;
+    height: 20px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+.hamburger-btn span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-text-dark);
+    border-radius: 2px;
+    transition: var(--transition-smooth);
+}
+
+.sidebar-mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 26, 28, 0.55);
+    z-index: 1800;
+}
+.sidebar-mobile-overlay.active {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .hamburger-btn {
+        display: flex;
+    }
+    .sidebar.mobile-open {
+        display: flex;
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100%;
+        z-index: 1900;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
+        animation: slideInSidebar 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+}
+
+@keyframes slideInSidebar {
+    from { transform: translateX(-100%); }
+    to  { transform: translateX(0); }
 }

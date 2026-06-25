@@ -87,4 +87,40 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+
+    // Hamburger menu toggle (mobile only)
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+    const mobileSidebar = document.querySelector(".sidebar");
+    const sidebarOverlay = document.getElementById("sidebarOverlay");
+
+    const closeMobileSidebar = () => {
+        mobileSidebar.classList.remove("mobile-open");
+        sidebarOverlay.classList.remove("active");
+        document.body.style.overflow = "";
+    };
+
+    const openMobileSidebar = () => {
+        mobileSidebar.classList.add("mobile-open");
+        sidebarOverlay.classList.add("active");
+        document.body.style.overflow = "hidden";
+    };
+
+    if (hamburgerBtn) {
+        hamburgerBtn.addEventListener("click", () => {
+            mobileSidebar.classList.contains("mobile-open")
+                ? closeMobileSidebar()
+                : openMobileSidebar();
+        });
+    }
+
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener("click", closeMobileSidebar);
+    }
+
+    // Close sidebar when a nav item is tapped on mobile
+    navItems.forEach((item) => {
+        item.addEventListener("click", () => {
+            if (window.innerWidth <= 768) closeMobileSidebar();
+        });
+    });
 });
